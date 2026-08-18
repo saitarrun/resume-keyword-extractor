@@ -17,12 +17,12 @@
   </p>
 
   <p align="center">
-    <a href="#key-capabilities">Key Features</a> •
-    <a href="#supported-job-portals--ats">Supported ATS</a> •
-    <a href="#architecture--engineering-highlights">Architecture</a> •
-    <a href="#installation-guide">Installation</a> •
-    <a href="#usage-workflow">Usage</a> •
-    <a href="#author--connect">Connect</a>
+    <a href="#quick-installation-guide">🚀 Quick Install</a> •
+    <a href="#key-capabilities">✨ Key Features</a> •
+    <a href="#usage-workflow">💻 Usage</a> •
+    <a href="#supported-job-portals--ats">🌐 Supported ATS</a> •
+    <a href="#architecture--engineering-highlights">🏗️ Architecture</a> •
+    <a href="#author--connect">👨‍💻 Connect</a>
   </p>
 
 </div>
@@ -34,6 +34,39 @@
 **Resume Skill Matcher** is built for software engineers, data scientists, and tech professionals looking to streamline resume tailoring and application optimization.
 
 Unlike generic parsers that flood users with soft skills (e.g., *"team player"*, *"problem solver"*) or break on complex multi-pane job boards, this extension employs a **100% technical ontology** and **deep DOM container isolation** to surface the exact languages, frameworks, cloud tools, databases, and architectures recruiters and ATS screeners look for.
+
+---
+
+## 🚀 Quick Installation Guide
+
+### Load in Google Chrome (Developer Mode)
+1. **Clone this repository**:
+   ```bash
+   git clone https://github.com/saitarrun/resume-skill-matcher.git
+   ```
+2. Open Google Chrome and navigate to:
+   ```text
+   chrome://extensions/
+   ```
+3. Enable **Developer mode** using the toggle switch in the upper-right corner.
+4. Click the **Load unpacked** button.
+5. Select the cloned `resume-skill-matcher` folder.
+6. Pin **Resume Skill Matcher** to your Chrome toolbar for instant 1-click access!
+
+---
+
+## 💻 Usage Workflow
+
+1. **Open any job posting** on LinkedIn, Indeed, Greenhouse, or any ATS site.
+2. **Click the extension icon** in your toolbar to scan the posting.
+3. **Explore Extracted Skills**:
+   * Switch between **All**, **Required**, **Preferred**, and **Other** tabs.
+   * View the mention frequency (`4x`, `2x`) beside each skill.
+   * Click any skill row to scroll and pulse-highlight that keyword directly on the live webpage.
+4. **Copy for Resume Tailoring**:
+   * Click **Copy (Comma-Separated)** to paste into your resume skills section.
+   * Click **Copy (Bullets)** for formatted bullet-point lists.
+5. **Add Custom Keywords**: Type any proprietary tool or library into the custom keyword input and press **Enter**.
 
 ---
 
@@ -108,39 +141,6 @@ resume-skill-matcher/
 └── assets/
     └── banner.svg                 # Brand & Presentation Banner
 ```
-
----
-
-## 🚀 Installation Guide
-
-### Option 1: Load in Chrome Developer Mode
-1. Clone this repository to your local machine:
-   ```bash
-   git clone https://github.com/saitarrun/resume-skill-matcher.git
-   ```
-2. Open Google Chrome and visit:
-   ```text
-   chrome://extensions/
-   ```
-3. Enable **Developer mode** using the toggle switch in the upper-right corner.
-4. Click the **Load unpacked** button.
-5. Select the cloned `resume-skill-matcher` directory.
-6. Pin the extension to your Chrome toolbar for instant access.
-
----
-
-## 💻 Usage Workflow
-
-1. **Navigate to any job posting** on LinkedIn, Indeed, Greenhouse, or any ATS site.
-2. **Click the Resume Skill Matcher icon** in your toolbar.
-3. **Review Extracted Skills**:
-   * Switch between **All**, **Required**, **Preferred**, and **Other** tabs.
-   * View the frequency count (`4x`, `2x`) beside each skill.
-   * Click any skill row to scroll and pulse-highlight that keyword directly on the live webpage.
-4. **Copy for Resume Tailoring**:
-   * Click **Copy (Comma-Separated)** to paste into your resume skills section.
-   * Click **Copy (Bullets)** for formatted bullet-point lists.
-5. **Add Custom Keywords**: Type any proprietary tool or library into the custom keyword input and press **Enter**.
 
 ---
 
