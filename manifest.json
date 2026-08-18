@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Job Keyword Extractor",
-  "version": "2.2.0",
-  "description": "Scans job postings across Y Combinator, iCIMS, Ashby, Greenhouse, LinkedIn, Indeed, and all career portals to extract keywords.",
+  "name": "Resume Skill Matcher - ATS Keyword Extractor",
+  "version": "2.3.0",
+  "description": "AI & ATS Resume Skill Matcher. Scans job postings across LinkedIn, Indeed, Greenhouse, and 20+ ATS platforms to extract required/preferred technical skills and highlight in-page.",
   "permissions": [
     "activeTab",
     "scripting",

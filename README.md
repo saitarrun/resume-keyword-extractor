@@ -1,14 +1,14 @@
 <div align="center">
 
-  <img src="assets/banner.svg" alt="Job Keyword Extractor Banner" width="100%" />
+  <img src="assets/banner.svg" alt="Resume Skill Matcher Banner" width="100%" />
 
   <br/><br/>
 
-  [![Manifest V3](https://img.shields.io/badge/Manifest_V3-Chrome_Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
-  [![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://github.com/saitarrun/job-keyword-extractor-extension)
-  [![ATS Support](https://img.shields.io/badge/ATS_Platforms-20+-6366F1?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
-  [![Privacy First](https://img.shields.io/badge/Privacy-100%25_Offline-10B981?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
-  [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/saitarrun/job-keyword-extractor-extension/blob/main/LICENSE)
+  [![Manifest V3](https://img.shields.io/badge/Manifest_V3-Chrome_Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/saitarrun/resume-skill-matcher)
+  [![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://github.com/saitarrun/resume-skill-matcher)
+  [![ATS Support](https://img.shields.io/badge/ATS_Platforms-20+-6366F1?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/saitarrun/resume-skill-matcher)
+  [![Privacy First](https://img.shields.io/badge/Privacy-100%25_Offline-10B981?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/saitarrun/resume-skill-matcher)
+  [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/saitarrun/resume-skill-matcher/blob/main/LICENSE)
 
   <br/>
 
@@ -31,7 +31,7 @@
 
 ## 🌟 Overview
 
-**Job Keyword Extractor** is built for software engineers, data scientists, and tech professionals looking to streamline resume tailoring and application optimization.
+**Resume Skill Matcher** is built for software engineers, data scientists, and tech professionals looking to streamline resume tailoring and application optimization.
 
 Unlike generic parsers that flood users with soft skills (e.g., *"team player"*, *"problem solver"*) or break on complex multi-pane job boards, this extension employs a **100% technical ontology** and **deep DOM container isolation** to surface the exact languages, frameworks, cloud tools, databases, and architectures recruiters and ATS screeners look for.
 
@@ -86,7 +86,7 @@ graph TD
 ## 🏗️ Architecture & Engineering Highlights
 
 ```text
-job-keyword-extractor/
+resume-skill-matcher/
 ├── manifest.json                  # Manifest V3 Configuration
 ├── popup/
 │   ├── popup.html                 # Glassmorphism Popup Interface
@@ -109,11 +109,6 @@ job-keyword-extractor/
     └── banner.svg                 # Brand & Presentation Banner
 ```
 
-### Technical Implementation Details:
-1. **Verbatim In-Text Casing**: When matching aliases (e.g. `'python'`, `'py'`), the engine maps the match directly back to the original source text token to preserve proper capitalization (e.g. `Python 3` or `PostgreSQL`).
-2. **Safe Link Guards**: Automated description expanders exclusively target non-link `<button>` elements, preventing accidental page navigation when encountering recruiter profile links.
-3. **Dual-Mode Clipboard Integration**: Employs an asynchronous `navigator.clipboard` write with a seamless `document.execCommand('copy')` fallback for guaranteed clipboard delivery.
-
 ---
 
 ## 🚀 Installation Guide
@@ -121,7 +116,7 @@ job-keyword-extractor/
 ### Option 1: Load in Chrome Developer Mode
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/saitarrun/job-keyword-extractor-extension.git
+   git clone https://github.com/saitarrun/resume-skill-matcher.git
    ```
 2. Open Google Chrome and visit:
    ```text
@@ -129,7 +124,7 @@ job-keyword-extractor/
    ```
 3. Enable **Developer mode** using the toggle switch in the upper-right corner.
 4. Click the **Load unpacked** button.
-5. Select the cloned `job-keyword-extractor-extension` directory.
+5. Select the cloned `resume-skill-matcher` directory.
 6. Pin the extension to your Chrome toolbar for instant access.
 
 ---
@@ -137,7 +132,7 @@ job-keyword-extractor/
 ## 💻 Usage Workflow
 
 1. **Navigate to any job posting** on LinkedIn, Indeed, Greenhouse, or any ATS site.
-2. **Click the Job Keyword Extractor icon** in your toolbar.
+2. **Click the Resume Skill Matcher icon** in your toolbar.
 3. **Review Extracted Skills**:
    * Switch between **All**, **Required**, **Preferred**, and **Other** tabs.
    * View the frequency count (`4x`, `2x`) beside each skill.
