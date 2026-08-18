@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Job Keyword Extractor",
+  "version": "2.2.0",
+  "description": "Scans job postings across Y Combinator, iCIMS, Ashby, Greenhouse, LinkedIn, Indeed, and all career portals to extract keywords.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background/service_worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "src/nlp/trie.js",
+        "src/nlp/dictionary.js",
+        "src/nlp/section_classifier.js",
+        "src/nlp/extractor.js",
+        "src/parsers/deep_dom_reader.js",
+        "src/parsers/portal_registry.js",
+        "src/parsers/highlighter.js",
+        "src/parsers/element_picker.js",
+        "src/content/content_script.js"
+      ],
+      "css": [
+        "src/ui/floating_widget.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

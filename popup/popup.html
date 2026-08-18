@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Keyword Extractor</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    
+    <!-- Top Header Bar -->
+    <header class="app-header">
+      <div class="brand-row">
+        <span class="brand-pill">
+          <span class="live-dot"></span>
+          <span>Job Scanner</span>
+        </span>
+        <div class="header-tools">
+          <button id="btn-toggle-hl" class="tool-btn" title="Toggle in-page highlights">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button id="btn-rescan" class="tool-btn" title="Re-scan current page">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </button>
+          <button id="btn-pick" class="tool-btn" title="Target specific element on page">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      
+      <div class="job-meta-card">
+        <h1 id="job-title" class="job-title">Scanning active job...</h1>
+        <div id="job-company" class="job-company">Detecting requirements & skills</div>
+      </div>
+    </header>
+
+    <!-- Scope Filter Segmented Control: All, Required, Preferred, Other -->
+    <nav class="scope-segmented-nav">
+      <button class="scope-btn active" data-scope="all">
+        <span class="btn-label">All</span>
+        <span id="tab-count-all" class="count-pill">0</span>
+      </button>
+      <button class="scope-btn" data-scope="required">
+        <span class="btn-label">Required</span>
+        <span id="tab-count-required" class="count-pill pill-req">0</span>
+      </button>
+      <button class="scope-btn" data-scope="preferred">
+        <span class="btn-label">Preferred</span>
+        <span id="tab-count-preferred" class="count-pill pill-pref">0</span>
+      </button>
+      <button class="scope-btn" data-scope="other">
+        <span class="btn-label">Other</span>
+        <span id="tab-count-other" class="count-pill pill-oth">0</span>
+      </button>
+    </nav>
+
+    <!-- Search / Filter Input -->
+    <div class="search-wrap">
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </span>
+      <input type="text" id="search-input" placeholder="Search keywords in this tab..." autocomplete="off">
+      <button id="btn-clear-search" class="clear-search-btn" style="display: none;" title="Clear search">✕</button>
+    </div>
+
+    <!-- Minimalist Checklist Display -->
+    <main class="list-section">
+      <div id="skills-list" class="skills-list">
+        <div class="empty-state">
+          <div class="spinner"></div>
+          <span>Analyzing job description...</span>
+        </div>
+      </div>
+
+      <!-- Expand/Collapse toggle link -->
+      <div id="show-more-wrap" class="show-more-wrap" style="display: none;">
+        <button id="btn-show-more" class="show-more-btn">
+          <span id="show-more-label">show more</span>
+          <svg class="chevron-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </main>
+
+    <!-- Add Custom Keyword Bar -->
+    <section class="custom-kw-section">
+      <div class="custom-kw-box">
+        <input type="text" id="custom-kw-input" placeholder="+ Add custom keyword..." autocomplete="off">
+        <button id="btn-add-custom-kw" class="btn-add-submit">Add</button>
+      </div>
+    </section>
+
+    <!-- Bottom Action Footer -->
+    <footer class="app-footer">
+      <button id="btn-copy-all" class="btn-primary" title="Copy all keywords in this scope">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span>Copy All</span>
+      </button>
+      <button id="btn-copy-bullets" class="btn-secondary" title="Copy as bulleted list">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        <span>Copy Bullets</span>
+      </button>
+    </footer>
+
+    <!-- Toast Feedback Notification -->
+    <div id="toast" class="toast">Copied to clipboard!</div>
+
+  </div>
+
+  <script src="../src/nlp/trie.js"></script>
+  <script src="../src/nlp/dictionary.js"></script>
+  <script src="../src/nlp/section_classifier.js"></script>
+  <script src="../src/nlp/extractor.js"></script>
+  <script src="../src/parsers/deep_dom_reader.js"></script>
+  <script src="../src/parsers/portal_registry.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
