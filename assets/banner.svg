@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="45%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+
+    <!-- Accent Gradient for Highlights -->
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#818cf8" />
+      <stop offset="100%" stop-color="#c084fc" />
+    </linearGradient>
+
+    <linearGradient id="badgeGradReq" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#b91c1c" stop-opacity="0.15" />
+    </linearGradient>
+
+    <linearGradient id="badgeGradPref" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0.15" />
+    </linearGradient>
+
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="60" result="blur" />
+    </filter>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="420" fill="url(#bgGrad)" />
+
+  <!-- Ambient Glow Orbs -->
+  <circle cx="150" cy="80" r="180" fill="#3b82f6" opacity="0.15" filter="url(#glow)" />
+  <circle cx="1050" cy="320" r="220" fill="#8b5cf6" opacity="0.2" filter="url(#glow)" />
+  <circle cx="650" cy="180" r="140" fill="#06b6d4" opacity="0.1" filter="url(#glow)" />
+
+  <!-- Subtle Tech Grid Lines -->
+  <g opacity="0.05" stroke="#ffffff" stroke-width="1">
+    <line x1="0" y1="70" x2="1200" y2="70" />
+    <line x1="0" y1="140" x2="1200" y2="140" />
+    <line x1="0" y1="210" x2="1200" y2="210" />
+    <line x1="0" y1="280" x2="1200" y2="280" />
+    <line x1="0" y1="350" x2="1200" y2="350" />
+    <line x1="200" y1="0" x2="200" y2="420" />
+    <line x1="400" y1="0" x2="400" y2="420" />
+    <line x1="600" y1="0" x2="600" y2="420" />
+    <line x1="800" y1="0" x2="800" y2="420" />
+    <line x1="1000" y1="0" x2="1000" y2="420" />
+  </g>
+
+  <!-- Left Side: Typography & Badges -->
+  <!-- Tagline Pill -->
+  <g transform="translate(80, 55)">
+    <rect width="250" height="32" rx="16" fill="url(#cardGrad)" stroke="#38bdf8" stroke-opacity="0.3" stroke-width="1" />
+    <circle cx="16" cy="16" r="4" fill="#38bdf8" />
+    <text x="30" y="21" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="600" letter-spacing="1">CHROME EXTENSION (MV3)</text>
+  </g>
+
+  <!-- Main Title -->
+  <text x="80" y="145" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="44" font-weight="800" letter-spacing="-0.5">
+    Job Keyword Extractor
+  </text>
+
+  <!-- Gradient Subtitle -->
+  <text x="80" y="190" fill="url(#accentGrad)" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="600">
+    High-Precision ATS Technical Skill Parser &amp; In-Page Highlighter
+  </text>
+
+  <!-- Description -->
+  <text x="80" y="235" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="400">
+    Instantly extracts core technical skills from LinkedIn, Indeed, and 20+ ATS platforms.
+  </text>
+  <text x="80" y="260" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="400">
+    Categorizes into Required, Preferred, and Other with 100% exact in-text casing preservation.
+  </text>
+
+  <!-- Feature Metric Badges -->
+  <g transform="translate(80, 310)">
+    <!-- Badge 1 -->
+    <g transform="translate(0, 0)">
+      <rect width="145" height="54" rx="12" fill="url(#cardGrad)" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1" />
+      <text x="16" y="24" fill="#38bdf8" font-family="sans-serif" font-size="16" font-weight="700">100%</text>
+      <text x="16" y="42" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="500">Technical Only</text>
+    </g>
+
+    <!-- Badge 2 -->
+    <g transform="translate(160, 0)">
+      <rect width="145" height="54" rx="12" fill="url(#cardGrad)" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1" />
+      <text x="16" y="24" fill="#818cf8" font-family="sans-serif" font-size="16" font-weight="700">20+ ATS</text>
+      <text x="16" y="42" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="500">Portals Supported</text>
+    </g>
+
+    <!-- Badge 3 -->
+    <g transform="translate(320, 0)">
+      <rect width="145" height="54" rx="12" fill="url(#cardGrad)" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1" />
+      <text x="16" y="24" fill="#34d399" font-family="sans-serif" font-size="16" font-weight="700">&lt; 5ms</text>
+      <text x="16" y="42" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="500">Client-Side Speed</text>
+    </g>
+
+    <!-- Badge 4 -->
+    <g transform="translate(480, 0)">
+      <rect width="145" height="54" rx="12" fill="url(#cardGrad)" stroke="#ffffff" stroke-opacity="0.12" stroke-width="1" />
+      <text x="16" y="24" fill="#f472b6" font-family="sans-serif" font-size="16" font-weight="700">Zero API</text>
+      <text x="16" y="42" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="500">100% Private Offline</text>
+    </g>
+  </g>
+
+  <!-- Right Side: Interactive UI Card Mockup Preview -->
+  <g transform="translate(770, 45)" filter="url(#cardShadow)">
+    <!-- Main Floating Glass Container -->
+    <rect width="350" height="330" rx="18" fill="#0f172a" fill-opacity="0.85" stroke="#ffffff" stroke-opacity="0.15" stroke-width="1.5" />
+    
+    <!-- Top Header Bar inside Card -->
+    <g transform="translate(18, 18)">
+      <rect width="32" height="32" rx="8" fill="#3b82f6" fill-opacity="0.2" stroke="#3b82f6" stroke-opacity="0.4" />
+      <text x="11" y="21" fill="#38bdf8" font-family="sans-serif" font-size="14" font-weight="bold">⚡</text>
+      <text x="42" y="16" fill="#f8fafc" font-family="sans-serif" font-size="14" font-weight="700">Software Engineer, Backend</text>
+      <text x="42" y="28" fill="#64748b" font-family="sans-serif" font-size="11" font-weight="500">Tessera Labs · Hybrid</text>
+    </g>
+
+    <!-- Scope Pills Row -->
+    <g transform="translate(18, 68)">
+      <rect width="70" height="26" rx="13" fill="#ffffff" fill-opacity="0.12" />
+      <text x="18" y="17" fill="#ffffff" font-family="sans-serif" font-size="11" font-weight="600">All 15</text>
+
+      <g transform="translate(76, 0)">
+        <rect width="76" height="26" rx="13" fill="#ef4444" fill-opacity="0.2" stroke="#ef4444" stroke-opacity="0.3" />
+        <text x="12" y="17" fill="#fca5a5" font-family="sans-serif" font-size="11" font-weight="600">Required 6</text>
+      </g>
+
+      <g transform="translate(158, 0)">
+        <rect width="80" height="26" rx="13" fill="#f59e0b" fill-opacity="0.2" stroke="#f59e0b" stroke-opacity="0.3" />
+        <text x="12" y="17" fill="#fde68a" font-family="sans-serif" font-size="11" font-weight="600">Preferred 4</text>
+      </g>
+
+      <g transform="translate(244, 0)">
+        <rect width="68" height="26" rx="13" fill="#64748b" fill-opacity="0.2" />
+        <text x="14" y="17" fill="#cbd5e1" font-family="sans-serif" font-size="11" font-weight="600">Other 5</text>
+      </g>
+    </g>
+
+    <!-- Skill Rows List Preview -->
+    <g transform="translate(18, 110)">
+      <!-- Row 1: Python -->
+      <g transform="translate(0, 0)">
+        <rect width="314" height="42" rx="10" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" />
+        <circle cx="20" cy="21" r="10" fill="#3b82f6" fill-opacity="0.2" />
+        <path d="M16 21 l3 3 l5 -5" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="38" y="26" fill="#f1f5f9" font-family="sans-serif" font-size="13" font-weight="600">Python</text>
+        <rect x="200" y="11" width="58" height="20" rx="6" fill="url(#badgeGradReq)" stroke="#ef4444" stroke-opacity="0.4" />
+        <text x="207" y="25" fill="#fca5a5" font-family="sans-serif" font-size="10" font-weight="700">Required</text>
+        <text x="274" y="26" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="700">4x</text>
+      </g>
+
+      <!-- Row 2: Distributed Systems -->
+      <g transform="translate(0, 50)">
+        <rect width="314" height="42" rx="10" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" />
+        <circle cx="20" cy="21" r="10" fill="#3b82f6" fill-opacity="0.2" />
+        <path d="M16 21 l3 3 l5 -5" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="38" y="26" fill="#f1f5f9" font-family="sans-serif" font-size="13" font-weight="600">Distributed Systems</text>
+        <rect x="200" y="11" width="58" height="20" rx="6" fill="url(#badgeGradReq)" stroke="#ef4444" stroke-opacity="0.4" />
+        <text x="207" y="25" fill="#fca5a5" font-family="sans-serif" font-size="10" font-weight="700">Required</text>
+        <text x="274" y="26" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="700">2x</text>
+      </g>
+
+      <!-- Row 3: Kubernetes -->
+      <g transform="translate(0, 100)">
+        <rect width="314" height="42" rx="10" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" />
+        <circle cx="20" cy="21" r="10" fill="#3b82f6" fill-opacity="0.2" />
+        <path d="M16 21 l3 3 l5 -5" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="38" y="26" fill="#f1f5f9" font-family="sans-serif" font-size="13" font-weight="600">Kubernetes</text>
+        <rect x="196" y="11" width="62" height="20" rx="6" fill="url(#badgeGradPref)" stroke="#f59e0b" stroke-opacity="0.4" />
+        <text x="202" y="25" fill="#fde68a" font-family="sans-serif" font-size="10" font-weight="700">Preferred</text>
+        <text x="274" y="26" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="700">1x</text>
+      </g>
+
+      <!-- Row 4: AI systems -->
+      <g transform="translate(0, 150)">
+        <rect width="314" height="42" rx="10" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-opacity="0.08" />
+        <circle cx="20" cy="21" r="10" fill="#3b82f6" fill-opacity="0.2" />
+        <path d="M16 21 l3 3 l5 -5" stroke="#38bdf8" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+        <text x="38" y="26" fill="#f1f5f9" font-family="sans-serif" font-size="13" font-weight="600">AI systems</text>
+        <rect x="208" y="11" width="50" height="20" rx="6" fill="#64748b" fill-opacity="0.25" stroke="#64748b" stroke-opacity="0.4" />
+        <text x="217" y="25" fill="#cbd5e1" font-family="sans-serif" font-size="10" font-weight="700">Other</text>
+        <text x="274" y="26" fill="#94a3b8" font-family="sans-serif" font-size="11" font-weight="700">2x</text>
+      </g>
+    </g>
+  </g>
+</svg>
