@@ -4,11 +4,11 @@
 
   <br/><br/>
 
-  [![Chrome Web Store](https://img.shields.io/badge/Manifest_V3-Chrome_Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
+  [![Manifest V3](https://img.shields.io/badge/Manifest_V3-Chrome_Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
   [![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://github.com/saitarrun/job-keyword-extractor-extension)
-  [![Platform Support](https://img.shields.io/badge/ATS_Platforms-20+-6366F1?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
+  [![ATS Support](https://img.shields.io/badge/ATS_Platforms-20+-6366F1?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
   [![Privacy First](https://img.shields.io/badge/Privacy-100%25_Offline-10B981?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/saitarrun/job-keyword-extractor-extension)
-  [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+  [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/saitarrun/job-keyword-extractor-extension/blob/main/LICENSE)
 
   <br/>
 
@@ -17,12 +17,12 @@
   </p>
 
   <p align="center">
-    <a href="#-key-capabilities">Key Features</a> •
-    <a href="#-supported-job-portals--ats">Supported ATS</a> •
-    <a href="#-architecture--engineering-highlights">Architecture</a> •
-    <a href="#-installation-guide">Installation</a> •
-    <a href="#-usage-workflow">Usage</a> •
-    <a href="#-author--connect">Connect</a>
+    <a href="#key-capabilities">Key Features</a> •
+    <a href="#supported-job-portals--ats">Supported ATS</a> •
+    <a href="#architecture--engineering-highlights">Architecture</a> •
+    <a href="#installation-guide">Installation</a> •
+    <a href="#usage-workflow">Usage</a> •
+    <a href="#author--connect">Connect</a>
   </p>
 
 </div>
@@ -58,16 +58,16 @@ Engineered with platform-specific selectors and automated container detection:
 
 ```mermaid
 graph TD
-    A[Target Webpage] --> B{Portal Detection Engine}
-    B -->|LinkedIn| C[#job-details & Active Pane Isolation]
-    B -->|Indeed| D[#jobDescriptionText & Header Extractors]
-    B -->|Greenhouse / Lever| E[.posting-sections & #content]
-    B -->|Ashby / Workday| F[._description_ & data-automation-id]
-    B -->|YC / Glassdoor / iCIMS| G[Platform-Specific Containers]
-    B -->|Any Other Career Site| H[Universal Fallback Heuristics Engine]
-    C & D & E & F & G & H --> I[Client-Side NLP & Section Classifier]
-    I --> J[Scope Classification: Required | Preferred | Other]
-    J --> K[Glassmorphism UI & In-Page Highlighter]
+    A["Target Webpage"] --> B{"Portal Detection Engine"}
+    B -->|LinkedIn| C["#job-details & Active Pane Isolation"]
+    B -->|Indeed| D["#jobDescriptionText & Header Extractors"]
+    B -->|Greenhouse / Lever| E[".posting-sections & #content"]
+    B -->|Ashby / Workday| F["._description_ & data-automation-id"]
+    B -->|YC / Glassdoor / iCIMS| G["Platform-Specific Containers"]
+    B -->|Any Other Career Site| H["Universal Fallback Heuristics Engine"]
+    C & D & E & F & G & H --> I["Client-Side NLP & Section Classifier"]
+    I --> J["Scope Classification: Required, Preferred, Other"]
+    J --> K["Glassmorphism UI & In-Page Highlighter"]
 ```
 
 * **LinkedIn**: Single job posts (`/jobs/view/`) & multi-pane search/collections (`/jobs/search/`, `/jobs/collections/`)
