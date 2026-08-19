@@ -625,6 +625,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA', 'INPUT', 'MARK', 'CODE', 'SVG', 'BUTTON'].includes(tag)) {
                   return NodeFilter.FILTER_REJECT;
                 }
+                regex.lastIndex = 0;
                 return regex.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
               }
             }

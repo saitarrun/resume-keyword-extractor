@@ -51,7 +51,7 @@ const SKILL_DICTIONARY = [
   // 4. PROGRAMMING LANGUAGES, RUNTIMES & LOW-LEVEL
   // =========================================================================
   { term: 'JavaScript', aliases: ['javascript (es6)', 'javascript (es6+)', 'javascript', 'vanilla js', 'es6', 'es6+', 'es2020', 'es2022', 'es2023', 'es2024', 'ecmascript'], type: 'Technical' },
-  { term: 'TypeScript', aliases: ['typescript'], type: 'Technical' },
+  { term: 'TypeScript', aliases: ['typescript', 'type script', 'ts'], type: 'Technical' },
   { term: 'Python', aliases: ['python (programming language)', 'python', 'python3', 'python 3', 'cpython', 'pypy', 'pyspark'], type: 'Technical' },
   { term: 'Java', aliases: ['java', 'core java', 'java 8', 'java 11', 'java 17', 'java 21', 'jdk', 'jvm', 'j2ee', 'jakarta ee', 'jakarta', 'jsp', 'javaserver pages', 'servlets', 'servlet'], type: 'Technical' },
   { term: 'C++', aliases: ['c++', 'cpp', 'c++11', 'c++14', 'c++17', 'c++20', 'c++23', 'modern c++', 'stl'], type: 'Technical' },
@@ -121,7 +121,7 @@ const SKILL_DICTIONARY = [
   { term: '.NET Core / ASP.NET', aliases: ['.net framework', '.net core', '.net 6', '.net 7', '.net 8', '.net 9', 'asp.net', 'asp.net core', 'entity framework', 'ef core', 'linq', 'blazor', 'signalr', 'wcf'], type: 'Technical' },
   { term: 'Ruby on Rails', aliases: ['rails', 'ror', 'active record', 'sidekiq'], type: 'Technical' },
   { term: 'Laravel', aliases: ['laravel', 'eloquent', 'symfony', 'artisan'], type: 'Technical' },
-  { term: 'APIs & Web Services', aliases: ['restful apis', 'rest api', 'restful api', 'rest apis', 'web services', 'web service', 'api development', 'api design', 'graphql', 'apollo server', 'apollo client', 'relay', 'graphql schema', 'grpc', 'protobuf', 'protocol buffers', 'openapi', 'swagger', 'webhooks'], type: 'Technical' },
+  { term: 'APIs & Web Services', aliases: ['restful apis', 'rest api', 'restful api', 'rest apis', 'rest-apis', 'rest-api', 'restful-apis', 'restful-api', 'restful', 'web services', 'web service', 'api development', 'api design', 'graphql', 'apollo server', 'apollo client', 'relay', 'graphql schema', 'grpc', 'protobuf', 'protocol buffers', 'openapi', 'swagger', 'webhooks', 'apis', 'api'], type: 'Technical' },
   { term: 'WebSockets & Real-Time', aliases: ['websocket', 'websockets', 'socket.io', 'sse', 'server-sent events', 'webrtc'], type: 'Technical' },
   { term: 'Microservices', aliases: ['microservices', 'microservice', 'micro-service', 'micro-services', 'microservice architecture', 'service mesh', 'domain-driven design', 'ddd', 'cqrs', 'event sourcing', 'saga pattern', 'actor model', 'dapr'], type: 'Technical' },
   { term: 'Kafka / Event Streaming', aliases: ['kafka', 'apache kafka', 'kafka stream', 'kafka streams', 'kafka connect', 'event-driven architecture', 'event streaming', 'event-driven', 'redpanda', 'apache pulsar'], type: 'Technical' },
