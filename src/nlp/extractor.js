@@ -72,6 +72,7 @@ class KeywordExtractor {
     if (!text || typeof text !== 'string') return '';
     return text
       .replace(/\r\n/g, '\n')
+      .replace(/#[A-Za-z0-9_\-]+/g, ' ')        // Strip LinkedIn & social hashtags (e.g. #NewGrad #WomenInTech)
       .replace(/https?:\/\/[^\s<>"')]+/gi, ' ') // Strip http:// and https:// URLs
       .replace(/www\.[^\s<>"')]+/gi, ' ')       // Strip www. links
       .replace(/mailto:[^\s<>"')]+/gi, ' ')     // Strip mailto links

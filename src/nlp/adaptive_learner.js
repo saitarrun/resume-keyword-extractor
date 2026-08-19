@@ -1,7 +1,7 @@
 // Real-Time In-Browser Adaptive Learning & Technical Entity Discovery Engine
-// 1. Mines emerging technical entities & tools using grammatical context heuristics
-// 2. Persists user feedback (blocklist on dismissal, auto-aliased custom terms) via chrome.storage.local
-// 3. Builds a local, offline skill knowledge graph across job postings
+// 1. Mines emerging technical entities & tools using strict grammatical context heuristics
+// 2. Filters out social hashtags, job titles, and recruitment buzzwords
+// 3. Persists user feedback (blocklist on dismissal, auto-aliased custom terms) via chrome.storage.local
 
 class AdaptiveLearner {
   constructor() {
@@ -9,7 +9,7 @@ class AdaptiveLearner {
     this.learnedSkills = new Map(); // term -> { term, aliases, count, discoveredAt }
     this.isInitialized = false;
 
-    // Common non-technical English capitalized words to exclude from candidate discovery
+    // Common non-technical words, corporate titles, hashtags, and recruitment noise to exclude
     this.stopWords = new Set([
       'the', 'this', 'that', 'with', 'from', 'have', 'been', 'were', 'will',
       'and', 'or', 'for', 'nor', 'but', 'yet', 'so', 'in', 'to', 'as', 'of', 'on', 'by', 'via', 'using',
@@ -24,20 +24,21 @@ class AdaptiveLearner {
       'benefits', 'culture', 'remote', 'hybrid', 'office', 'full', 'time', 'part',
       'monday', 'friday', 'january', 'december', 'september', 'october', 'november',
       'bachelor', 'master', 'united', 'states', 'america', 'europe', 'asia', 'canada',
-      'session', 'tracing', 'such', 'like', 'including', 'following', 'across', 'within'
+      'session', 'tracing', 'such', 'like', 'including', 'following', 'across', 'within',
+      // Job titles & social hashtags
+      'newgrad', 'new grad', 'softwareengineer', 'software engineer', 'softwaredeveloper',
+      'software developer', 'womenintech', 'women in tech', 'societyofwomenengineers',
+      'careergrowth', 'career growth', 'softwaredevelopment', 'software development',
+      'systemsengineering', 'earlycareer', 'early career', 'diversity', 'inclusion',
+      'equalopportunity', 'equal opportunity', 'hiring', 'recruiting', 'recruitment',
+      'referral', 'location', 'salary', 'benefits', 'job', 'jobs', 'careers'
     ]);
 
-    // Heuristic Context Patterns that precede technical skills in job descriptions
+    // Strict Technical Context Patterns that precede real technical tools/skills
     this.contextPatterns = [
       /(?:experience with|experience in|proficient in|proficiency in|hands[- ]on with|hands[- ]on in|strong knowledge of|skilled in|working knowledge of|expertise in|mastery of|background in|familiarity with|familiar with|working with|technologies including|tech stack including|tools such as|technologies such as|frameworks like|libraries like|languages such as|coding in|development using)\s+([A-Za-z0-9\.\+#]+(?:\s+[A-Za-z0-9\.\+#]+)?)/gi,
-      /(?:using|leverage|leveraging|utilize|utilizing|deploy|deploying|build with|built with|developed with)\s+([A-Z][a-zA-Z0-9\.\+#]+(?:\s+[A-Z][a-zA-Z0-9\.\+#]+)?)/g
+      /(?:frameworks|libraries|packages|tools|databases|languages)\s*:\s*([A-Za-z0-9\.\+#]+(?:\s*,\s*[A-Za-z0-9\.\+#]+)*)/gi
     ];
-
-    // PascalCase / CamelCase technical pattern (e.g., NextAuth, LangSmith, FastAPI, TailwindCSS)
-    this.pascalTechPattern = /\b([A-Z][a-z0-9]+[A-Z][a-zA-Z0-9]*(?:\.js)?)\b/g;
-
-    // Technical Acronym Pattern (e.g., JWT, RBAC, SDK, CLI, REST, WASM, RTOS)
-    this.acronymPattern = /\b([A-Z]{2,5})\b/g;
   }
 
   async init() {
@@ -124,7 +125,7 @@ class AdaptiveLearner {
     return Array.from(aliases);
   }
 
-  // Mine the job description for previously unseen technical entities
+  // Mine the job description for genuine unseen technical tools and frameworks
   discoverNewSkills(text, knownDictionaryTerms = new Set()) {
     if (!text || typeof text !== 'string') return [];
 
@@ -132,18 +133,31 @@ class AdaptiveLearner {
 
     const addCandidate = (rawTerm, reason) => {
       let cleaned = rawTerm.replace(/[,;:\(\)\[\]"']/g, '').trim();
+      // Strip leading hashtag
+      cleaned = cleaned.replace(/^#+/, '').trim();
       // Strip trailing conjunctions/prepositions
       cleaned = cleaned.replace(/\s+(and|or|for|with|in|to|as|of|on|by|via|using)$/i, '').trim();
       // Strip leading conjunctions/prepositions
       cleaned = cleaned.replace(/^(and|or|for|with|in|to|as|of|on|by|via|using)\s+/i, '').trim();
 
-      if (cleaned.length < 2 || cleaned.length > 35) return;
+      if (cleaned.length < 2 || cleaned.length > 30) return;
 
       const lower = cleaned.toLowerCase();
       if (this.stopWords.has(lower)) return;
       if (this.blocklist.has(lower)) return;
       if (knownDictionaryTerms.has(lower)) return;
       if (/^\d+$/.test(cleaned)) return; // Ignore purely numbers
+
+      // Filter out long compound concatenated words (e.g. 3+ capitalized words joined together like SocietyOfWomenEngineers)
+      const uppercaseWordCount = (cleaned.match(/[A-Z][a-z0-9]*/g) || []).length;
+      if (uppercaseWordCount >= 3 && !cleaned.includes('.') && !cleaned.includes('-')) {
+        return; // Filter out hashtag-style sentence joins
+      }
+
+      // Filter out job title suffixes
+      if (/(?:engineer|developer|manager|specialist|consultant|director|analyst|administrator|officer|recruiter|coordinator)$/i.test(cleaned)) {
+        return;
+      }
 
       const current = discoveredCandidates.get(lower) || {
         term: cleaned,
@@ -160,7 +174,7 @@ class AdaptiveLearner {
       discoveredCandidates.set(lower, current);
     };
 
-    // 1. Mine grammatical context hooks
+    // 1. Mine strict grammatical context hooks only
     for (const pattern of this.contextPatterns) {
       pattern.lastIndex = 0;
       let match;
@@ -171,15 +185,6 @@ class AdaptiveLearner {
             addCandidate(p, 'context_hook');
           }
         }
-      }
-    }
-
-    // 2. Mine CamelCase / PascalCase technical terms
-    this.pascalTechPattern.lastIndex = 0;
-    let match;
-    while ((match = this.pascalTechPattern.exec(text)) !== null) {
-      if (match[1]) {
-        addCandidate(match[1], 'camel_case_tech');
       }
     }
 
