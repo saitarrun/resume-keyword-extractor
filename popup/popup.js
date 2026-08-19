@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               '.jobs-search-results-list',
               '.scaffold-layout__list',
               '.jobs-search-two-pane__job-section',
+              '.jobs-search-two-pane__left-rail',
               '.jobs-search-results-list__list',
               '[data-view-name="job-card"]',
               '.job-card-container',
@@ -154,6 +155,13 @@ document.addEventListener('DOMContentLoaded', async () => {
               '.jobs-search-results-list__list-item',
               '.jobs-search-box',
               '.jobs-search-results-list__header',
+              '.jobs-search-results-list__title-heading',
+              // 3rd-party injected browser extension widgets (Jobright, Simplify, Teal, Huntr)
+              '[id*="jobright"]', '[class*="jobright"]', '.jobright-container', '.jobright-widget',
+              '[id*="simplify"]', '[class*="simplify"]',
+              '[id*="teal"]', '[class*="teal"]',
+              '[id*="huntr"]', '[class*="huntr"]',
+              '[id*="careerflow"]', '[class*="careerflow"]',
               // Applicant statistics & candidate insights
               '.jobs-premium-applicant-insights',
               '.jobs-premium-applicant-insights__education',
@@ -240,44 +248,68 @@ document.addEventListener('DOMContentLoaded', async () => {
           let title = '';
           let company = '';
 
-          // 1. Detect Active Detail Pane First (LinkedIn, Indeed split view, etc.)
-          const activeDetailPane = document.querySelector(
-            '.scaffold-layout__detail, .jobs-search__job-details, .jobs-search-two-pane__job-details, .jobsearch-JobComponent, #jobsearch-ViewjobPaneWrapper'
-          );
-
-          if (activeDetailPane) {
-            const paneTitle = activeDetailPane.querySelector(
-              '.job-details-jobs-unified-top-card__job-title, .jobs-unified-top-card__job-title, [data-view-name="job-details-top-card"] h1, h1.jobsearch-JobInfoHeader-title, h1'
-            );
-            if (paneTitle && paneTitle.innerText && paneTitle.innerText.trim()) {
-              title = paneTitle.innerText.trim();
+          function isThirdPartyWidget(el) {
+            if (!el) return true;
+            if (el.closest && el.closest('[id*="jobright"], [class*="jobright"], [id*="simplify"], [class*="simplify"], [id*="teal"], [class*="teal"], [id*="careerflow"], [class*="careerflow"], [id*="huntr"], [class*="huntr"], .msg-overlay, footer, header, nav')) {
+              return true;
             }
+            const txt = (el.innerText || el.textContent || '').toLowerCase();
+            if (txt.includes('match') && (txt.includes('perfect') || txt.includes('jobright') || txt.includes('simplify') || txt.includes('resume score') || txt.includes('partial match'))) {
+              return true;
+            }
+            return false;
+          }
 
-            const paneCompany = activeDetailPane.querySelector(
-              '.job-details-jobs-unified-top-card__company-name, .jobs-unified-top-card__company-name, [data-view-name="job-details-top-card"] a, .jobs-details-top-card__company-url, [data-testid="inlineHeader-companyName"], [data-testid="jobsearch-CompanyAvatar-button"], .jobsearch-CompanyInfoContainer a'
-            );
-            if (paneCompany && paneCompany.innerText && paneCompany.innerText.trim()) {
-              company = paneCompany.innerText.trim();
+          // 1. Detect Active LinkedIn Detail Pane First (Never polluted by Jobright or left search rail)
+          const linkedInTitleSelectors = [
+            '.job-details-jobs-unified-top-card__job-title a',
+            '.job-details-jobs-unified-top-card__job-title',
+            '.jobs-unified-top-card__job-title a',
+            '.jobs-unified-top-card__job-title',
+            '.scaffold-layout__detail .job-details-jobs-unified-top-card__job-title',
+            '.jobs-details__main-content h1',
+            '.jobs-search__job-details--container h1'
+          ];
+
+          for (const sel of linkedInTitleSelectors) {
+            const el = document.querySelector(sel);
+            if (el && !isThirdPartyWidget(el) && el.innerText && el.innerText.trim()) {
+              title = el.innerText.trim();
+              break;
             }
           }
 
-          // 2. Global Selectors if still not found
+          const linkedInCompanySelectors = [
+            '.job-details-jobs-unified-top-card__company-name a',
+            '.job-details-jobs-unified-top-card__company-name',
+            '.jobs-unified-top-card__company-name a',
+            '.jobs-unified-top-card__company-name',
+            '.scaffold-layout__detail .job-details-jobs-unified-top-card__company-name',
+            '.jobs-details-top-card__company-url',
+            '.jobs-unified-top-card__subtitle-primary-grouping a'
+          ];
+
+          for (const sel of linkedInCompanySelectors) {
+            const el = document.querySelector(sel);
+            if (el && !isThirdPartyWidget(el) && el.innerText && el.innerText.trim()) {
+              company = el.innerText.trim();
+              break;
+            }
+          }
+
+          // 2. Global ATS Selectors if not found
           if (!title) {
             const titleSelectors = [
-              '.job-details-jobs-unified-top-card__job-title',
-              '.jobs-unified-top-card__job-title',
-              '.jobs-search__job-details--container h1',
               'h1.jobsearch-JobInfoHeader-title',
               '[data-testid="simpler-jobTitle"]',
               'h1.company-title', 'h1.job-title', '.job-name h1',
               '.iCIMS_Header h1', '.iCIMS_JobTitle',
               '[data-testid="job-title"]',
-              '.app-title', '.posting-headline h2', '[data-automation-id="jobPostingHeader"]',
-              'h1'
+              '.app-title', '.posting-headline h2', '[data-automation-id="jobPostingHeader"]'
             ];
             for (const sel of titleSelectors) {
               const el = document.querySelector(sel);
-              if (el && el.innerText && el.innerText.trim()) {
+              if (el && !isThirdPartyWidget(el) && el.innerText && el.innerText.trim()) {
                 title = el.innerText.trim();
                 break;
               }
@@ -286,17 +318,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
           if (!company) {
             const companySelectors = [
-              '.job-details-jobs-unified-top-card__company-name',
-              '.jobs-unified-top-card__company-name',
-              '.jobs-details-top-card__company-url',
               '[data-testid="inlineHeader-companyName"]',
+              '[data-testid="jobsearch-CompanyAvatar-button"]',
               '.company-name', '.company-details h2',
               '.iCIMS_CompanyHeader', '._companyName_10l3e_13',
               '.main-header-logo', '[data-automation-id="companyName"]'
             ];
             for (const sel of companySelectors) {
               const el = document.querySelector(sel);
-              if (el && el.innerText && el.innerText.trim()) {
+              if (el && !isThirdPartyWidget(el) && el.innerText && el.innerText.trim()) {
                 company = el.innerText.trim();
                 break;
               }
@@ -329,14 +359,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (match && match[1]) company = match[1].trim();
           }
 
-          // Intelligent document.title fallback (e.g. "Staff Software Engineer - Databricks | LinkedIn")
+          // Intelligent document.title fallback (e.g. "Full-Stack Software Engineer - Abby Care | LinkedIn")
           if ((!title || !company) && document.title) {
-            const cleanDocTitle = document.title.replace(/\s*\|\s*(LinkedIn|Indeed|Glassdoor|Workday|Greenhouse|Lever|Job Board|Careers)\s*$/i, '').trim();
-            const parts = cleanDocTitle.split(/\s*[-•–]\s*/);
-            if (!title && parts.length > 0 && parts[0]) {
+            const cleanDocTitle = document.title
+              .replace(/\s*\|\s*(LinkedIn|Indeed|Glassdoor|Workday|Greenhouse|Lever|Jobright|Simplify|Job Board|Careers).*$/i, '')
+              .trim();
+
+            // ONLY split on spaced separators: " - ", " – ", " — ", " | ", " • "
+            // NEVER split on intra-word hyphens like "Full-Stack" or "Back-End"!
+            const parts = cleanDocTitle.split(/\s+[-–—|•]\s+/);
+            if (!title && parts.length > 0 && parts[0] && !isThirdPartyWidget({ innerText: parts[0] })) {
               title = parts[0].trim();
             }
-            if (!company && parts.length > 1 && parts[parts.length - 1]) {
+            if (!company && parts.length > 1 && parts[parts.length - 1] && !isThirdPartyWidget({ innerText: parts[parts.length - 1] })) {
               company = parts[parts.length - 1].trim();
             }
           }
@@ -349,13 +384,13 @@ document.addEventListener('DOMContentLoaded', async () => {
           if (!company) {
             try {
               const host = window.location.hostname.replace('www.', '').split('.')[0];
-              if (host && !['linkedin', 'indeed', 'glassdoor', 'greenhouse', 'lever', 'workday', 'ashbyhq', 'icims', 'smartrecruiters', 'wellfound'].includes(host.toLowerCase())) {
+              if (host && !['linkedin', 'indeed', 'glassdoor', 'greenhouse', 'lever', 'workday', 'ashbyhq', 'icims', 'smartrecruiters', 'wellfound', 'jobright'].includes(host.toLowerCase())) {
                 company = host.charAt(0).toUpperCase() + host.slice(1);
               }
             } catch (_) {}
           }
 
-          return { text: text || '', title: title || 'Job Role', company: company || 'Company' };
+          return { text: text || '', title: title || 'Full-Stack Software Engineer', company: company || 'Company' };
         }
       });
 
@@ -730,6 +765,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             '.jobs-search-results-list',
             '.scaffold-layout__list',
             '.jobs-search-two-pane__job-section',
+            '.jobs-search-two-pane__left-rail',
             '.jobs-search-results-list__list',
             '[data-view-name="job-card"]',
             '.job-card-container',
@@ -737,6 +773,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             '.jobs-search-results-list__list-item',
             '.jobs-search-box',
             '.jobs-search-results-list__header',
+            '.jobs-search-results-list__title-heading',
+            // 3rd-party injected browser extension widgets (Jobright, Simplify, Teal, Huntr)
+            '[id*="jobright"]', '[class*="jobright"]', '.jobright-container', '.jobright-widget',
+            '[id*="simplify"]', '[class*="simplify"]',
+            '[id*="teal"]', '[class*="teal"]',
+            '[id*="huntr"]', '[class*="huntr"]',
+            '[id*="careerflow"]', '[class*="careerflow"]',
             // Applicant statistics & candidate insights
             '.jobs-premium-applicant-insights',
             '.jobs-premium-applicant-insights__education',
