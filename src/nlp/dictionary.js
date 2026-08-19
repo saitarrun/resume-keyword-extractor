@@ -21,8 +21,8 @@ const SKILL_DICTIONARY = [
   { term: 'Test-Driven Development (TDD)', aliases: ['test-driven development', 'test driven development', 'test-driven', 'test driven', 'red-green-refactor', 'tdd'], type: 'Technical' },
   { term: 'Behavior-Driven Development (BDD)', aliases: ['behavior-driven development', 'behavior driven development', 'behavior-driven', 'behavior driven', 'cucumber', 'gherkin', 'bdd'], type: 'Technical' },
   { term: 'Functional Testing', aliases: ['functional testing', 'functional tests', 'functional test', 'functional automation', 'black box testing', 'black-box testing', 'white box testing', 'white-box testing', 'smoke testing', 'smoke tests', 'sanity testing', 'user acceptance testing', 'uat testing', 'acceptance testing', 'uat'], type: 'Technical' },
-  { term: 'Unit Testing', aliases: ['unit testing', 'unit tests', 'unit test', 'automated unit tests', 'write unit', 'writing unit', 'unit', 'jest', 'vitest', 'mocha', 'chai', 'junit', 'junit 5', 'pytest', 'unittest', 'nunit', 'xunit', 'mocking', 'code coverage', 'mutation testing', 'test coverage'], type: 'Technical' },
-  { term: 'Integration Testing', aliases: ['integration testing', 'integration tests', 'integration test', 'api testing', 'api tests', 'service testing', 'contract testing', 'pact', 'postman', 'newman', 'integration'], type: 'Technical' },
+  { term: 'Unit Testing', aliases: ['unit testing', 'unit tests', 'unit test', 'automated unit tests', 'write unit', 'writing unit', 'jest', 'vitest', 'mocha', 'chai', 'junit', 'junit 5', 'pytest', 'unittest', 'nunit', 'xunit', 'mocking', 'code coverage', 'mutation testing', 'test coverage'], type: 'Technical' },
+  { term: 'Integration Testing', aliases: ['integration testing', 'integration tests', 'integration test', 'api testing', 'api tests', 'service testing', 'contract testing', 'pact', 'postman', 'newman'], type: 'Technical' },
   { term: 'End-to-End (E2E) Testing', aliases: ['end-to-end testing', 'end-to-end tests', 'end to end testing', 'end to end tests', 'end to end', 'e2e testing', 'e2e tests', 'e2e test', 'playwright', 'cypress', 'selenium', 'selenium webdriver', 'puppeteer', 'appium', 'testcafe', 'nightwatch'], type: 'Technical' },
   { term: 'Performance & Load Testing', aliases: ['performance testing', 'load testing', 'stress testing', 'volume testing', 'k6', 'jmeter', 'apache jmeter', 'locust', 'artillery', 'gatling', 'benchmark testing'], type: 'Technical' },
   { term: 'Testing Frameworks & QA Automation', aliases: ['testing frameworks', 'testing framework', 'test frameworks', 'test framework', 'automated testing', 'test automation', 'regression testing', 'regression tests', 'automated test suites', 'qa automation', 'quality assurance', 'test harness', 'test harnesses', 'qa engineer', 'software testing', 'manual testing', 'system testing', 'test cases', 'test case', 'test planning', 'test plan', 'test plans', 'hp quality center', 'hp alm', 'software quality assurance', 'testing', 'qa'], type: 'Technical' },
@@ -54,7 +54,7 @@ const SKILL_DICTIONARY = [
   { term: 'Functional Programming (FP)', aliases: ['functional programming', 'immutability', 'pure functions', 'monads', 'currying'], type: 'Technical' },
   { term: 'Design Patterns', aliases: ['software design patterns', 'design patterns', 'design pattern', 'gang of four', 'singleton', 'factory pattern', 'builder pattern', 'observer pattern', 'strategy pattern', 'dependency injection', 'inversion of control', 'ioc', 'repository pattern', 'circuit breaker pattern'], type: 'Technical' },
   { term: 'Data Structures & Algorithms', aliases: ['data structures & algorithms', 'data structures', 'data structure', 'algorithms', 'algorithm', 'complexity analysis', 'big-o', 'big o', 'o(n)', 'o(log n)', 'binary search', 'dynamic programming', 'trees', 'graphs', 'hash maps', 'hash tables', 'sorting algorithms', 'recursion', 'backtracking', 'sliding window', 'two pointers', 'heap', 'priority queue', 'trie', 'graph algorithms', 'topological sort', 'dijkstra', 'dsa'], type: 'Technical' },
-  { term: 'Distributed Systems', aliases: ['distributed systems', 'distributed system', 'distributed software', 'distributed architecture', 'distributed computing', 'distributed applications', 'distributed services', 'distributed infrastructure', 'distributed tracing', 'distributed caching', 'distributed locking', 'tier-0 infrastructure', 'distributed'], type: 'Technical' },
+  { term: 'Distributed Systems', aliases: ['distributed systems', 'distributed system', 'distributed software', 'distributed architecture', 'distributed computing', 'distributed applications', 'distributed services', 'distributed infrastructure', 'distributed tracing', 'distributed caching', 'distributed locking', 'tier-0 infrastructure'], type: 'Technical' },
   { term: 'Source Control & Git', aliases: ['source control management', 'source control', 'version control', 'git/github', 'github', 'gitlab', 'bitbucket', 'git flow', 'trunk-based development', 'pull requests', 'pull request', 'branching', 'rebasing', 'git'], type: 'Technical' },
 
   // =========================================================================
@@ -76,7 +76,7 @@ const SKILL_DICTIONARY = [
   { term: 'C++', aliases: ['c++', 'cpp', 'c++11', 'c++14', 'c++17', 'c++20', 'c++23', 'modern c++', 'stl'], type: 'Technical' },
   { term: 'C#', aliases: ['c#', 'csharp', 'c sharp', '.net framework', '.net core', '.net', 'asp.net', 'entity framework'], type: 'Technical' },
   { term: 'C Language', aliases: ['c (programming language)', 'ansi c', 'c programming', 'c language', 'embedded c'], type: 'Technical' },
-  { term: 'Go / Golang', aliases: ['golang', 'go lang', 'go programming', 'goroutines', 'goroutine', 'go'], type: 'Technical' },
+  { term: 'Go / Golang', aliases: ['golang', 'go lang', 'go programming', 'go language', 'goroutines', 'goroutine', 'go backend', 'go developer', 'go engineer', 'go microservices', 'go'], type: 'Technical' },
   { term: 'Rust', aliases: ['rust', 'rustlang', 'cargo', 'tokio', 'actix'], type: 'Technical' },
   { term: 'Ruby', aliases: ['ruby', 'ruby 3', 'mri', 'ruby on rails'], type: 'Technical' },
   { term: 'PHP', aliases: ['php', 'php7', 'php8', 'hack lang', 'laravel', 'symfony'], type: 'Technical' },
@@ -131,12 +131,12 @@ const SKILL_DICTIONARY = [
   // 8. BACKEND FRAMEWORKS & DATABASES
   // =========================================================================
   { term: 'Node.js', aliases: ['nodejs', 'node.js', 'node', 'npm', 'pnpm', 'yarn', 'bun', 'deno'], type: 'Technical' },
-  { term: 'Express.js', aliases: ['expressjs', 'express.js', 'express', 'koa', 'fastify', 'hono', 'elysia'], type: 'Technical' },
+  { term: 'Express.js', aliases: ['expressjs', 'express.js', 'express js', 'express framework', 'express backend', 'koa', 'fastify', 'hono', 'elysia'], type: 'Technical' },
   { term: 'NestJS', aliases: ['nestjs', 'nest.js'], type: 'Technical' },
   { term: 'Django', aliases: ['django', 'django rest framework', 'drf', 'celery'], type: 'Technical' },
   { term: 'FastAPI', aliases: ['fastapi', 'fast-api', 'pydantic', 'starlette', 'uvicorn'], type: 'Technical' },
   { term: 'Flask', aliases: ['flask', 'jinja', 'werkzeug', 'gunicorn'], type: 'Technical' },
-  { term: 'Spring Framework', aliases: ['spring framework', 'spring boot', 'spring mvc', 'spring cloud', 'spring security', 'spring', 'hibernate', 'maven', 'eclipse', 'tomcat', 'apache tomcat'], type: 'Technical' },
+  { term: 'Spring Framework', aliases: ['spring framework', 'spring boot', 'spring mvc', 'spring cloud', 'spring security', 'spring data', 'java spring', 'hibernate', 'maven', 'eclipse', 'tomcat', 'apache tomcat'], type: 'Technical' },
   { term: '.NET Core / ASP.NET', aliases: ['.net framework', '.net core', '.net 6', '.net 7', '.net 8', '.net 9', 'asp.net', 'asp.net core', 'entity framework', 'ef core', 'linq', 'blazor', 'signalr', 'wcf'], type: 'Technical' },
   { term: 'Ruby on Rails', aliases: ['rails', 'ror', 'active record', 'sidekiq'], type: 'Technical' },
   { term: 'Laravel', aliases: ['laravel', 'eloquent', 'symfony', 'artisan'], type: 'Technical' },
@@ -168,7 +168,7 @@ const SKILL_DICTIONARY = [
   // 10. AI, MACHINE LEARNING, LLMS, GENAI & MLOPS
   // =========================================================================
   { term: 'Artificial General Intelligence (AGI)', aliases: ['agi-pilled', 'agi', 'artificial general intelligence', 'a.g.i.'], type: 'Technical' },
-  { term: 'Human-Agent Systems & AI Agents', aliases: ['human-agent collaboration', 'human-agent', 'human agent', 'human-in-the-loop', 'human in the loop', 'agent-owned workflows', 'agent-owned', 'autonomous agents', 'autonomous agent', 'ai agents', 'ai agent', 'multi-agent systems', 'multi-agent system', 'multi-agent', 'agent-driven', 'agentic ai', 'agentic systems', 'agentic', 'agents', 'agent', 'tool calling', 'function calling', 'agent swarms', 'agentic workflows'], type: 'Technical' },
+  { term: 'Human-Agent Systems & AI Agents', aliases: ['human-agent collaboration', 'human-agent', 'human agent', 'human-in-the-loop', 'human in the loop', 'agent-owned workflows', 'agent-owned', 'autonomous agents', 'autonomous agent', 'ai agents', 'ai agent', 'multi-agent systems', 'multi-agent system', 'multi-agent', 'agent-driven', 'agentic ai', 'agentic systems', 'agentic', 'tool calling', 'function calling', 'agent swarms', 'agentic workflows'], type: 'Technical' },
   { term: 'Artificial Intelligence (AI)', aliases: ['artificial intelligence', 'ai systems', 'ai technologies', 'ai solutions', 'ai models', 'ai tools', 'ai-driven', 'ai-powered', 'ai/ml', 'ai / ml', 'a.i.', 'ai'], type: 'Technical' },
   { term: 'Generative AI / GenAI', aliases: ['gen ai', 'generative ai', 'genai', 'large language models', 'large language model', 'llms', 'llm', 'gpt-4', 'gpt-4o', 'openai', 'claude', 'gemini', 'anthropic', 'mistral', 'llama 3', 'llama 2', 'prompt engineering', 'fine-tuning', 'lora', 'qlora', 'peft', 'vllm', 'ollama', 'diffusion models', 'stable diffusion', 'context window', 'kv cache', 'chain-of-thought', 'cot'], type: 'Technical' },
   { term: 'AI Inference & Accelerators (GPUs)', aliases: ['model inference', 'inference infrastructure', 'inference engine', 'gpu compute', 'accelerators', 'compute efficiency', 'traffic routing', 'load balancing for llms', 'triton inference server', 'vllm', 'tensorrt-llm', 'cuda', 'h100', 'a100', 'tpu', 'gpu clustering'], type: 'Technical' },

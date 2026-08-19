@@ -130,12 +130,30 @@ class KeywordExtractor {
 
       if (totalFreq > 0) {
         // Extract the exact verbatim grammatical spelling and capitalization from the text
+        // Extract the exact verbatim grammatical spelling and capitalization from the text
         let bestExactText = rule.term;
         let maxCount = 0;
         for (const [exactVariant, count] of exactTextOccurrences.entries()) {
           if (count > maxCount) {
             maxCount = count;
             bestExactText = exactVariant;
+          }
+        }
+
+        // Disambiguate short English homographs (e.g. Go programming vs English verb "go")
+        if (rule.term === 'Go / Golang') {
+          const explicitGoRegex = /\b(?:golang|go\s*lang|go\s*language|go\s*programming|goroutines?|go\s*(?:developer|engineer|backend|microservices?|code|services?|apis?))\b/i;
+          const techListPattern = /(?:Python|Java|Rust|C\+\+|TypeScript|JavaScript|Node|Ruby|C#|SQL|AWS|Docker|Kubernetes|gRPC|backend|programming|languages?|technologies?)\s*(?:[,/|\s]|\bor\b|\band\b)+\s*Go\b|\bGo\s*(?:[,/|\s]|\bor\b|\band\b)+\s*(?:Python|Java|Rust|C\+\+|TypeScript|JavaScript|Node|Ruby|C#|SQL|AWS|Docker|Kubernetes|gRPC|backend|programming|languages?|technologies?)/i;
+          const techExpPattern = /(?:experience\s+with|proficiency\s+in|proficient\s+in|knowledge\s+of|working\s+with|skills?\s+in|familiarity\s+with|built\s+with|written\s+in|using)\s+Go\b/i;
+
+          const isExplicit = explicitGoRegex.test(cleanText);
+          const isContextual = /(?<![a-zA-Z0-9])Go(?![a-zA-Z0-9])/.test(cleanText) && (techListPattern.test(cleanText) || techExpPattern.test(cleanText));
+
+          if (!isExplicit && !isContextual) {
+            continue; // Skip English verb "go"
+          }
+          if (isContextual && !isExplicit) {
+            bestExactText = 'Go';
           }
         }
 
