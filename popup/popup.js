@@ -215,14 +215,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             // Indeed
             '#jobDescriptionText',
             '.jobsearch-jobDescriptionText',
-            // YC / Startup
-            '.job-description', '.job-details', '.company-description', '[data-test="job-description"]',
+            '.jobsearch-JobComponent-description',
+            '#jobDescriptionSection',
+            // Greenhouse / Lever / Workday
+            '#content', '#job-body', '.posting-sections', '[data-automation-id="jobPostingDescription"]',
+            // YC / Startup / Wellfound
+            '.job-description', '.job-details', '.company-description', '[data-test="job-description"]', '[data-test="JobDescription"]',
             // iCIMS
             '.iCIMS_JobContent', '.iCIMS_JobDescription', '#iCIMS_JobContent', '.iCIMS_JobData',
             // Ashby
             '._description_10l3e_43', '._jobPostingDescription_10l3e_1', '[data-testid="job-description"]',
-            // Greenhouse / Lever / Workday
-            '#content', '#job-body', '.posting-sections', '[data-automation-id="jobPostingDescription"]'
+            // SmartRecruiters / Glassdoor / Dice / ZipRecruiter / BambooHR / Rippling / Taleo
+            '.job-sections', '.job-detail__description', '.JobDetails_jobDescription__uW_fK', '#JobDescriptionContainer', '#jobDescription', '.job_description', '.jss-job-description', '.pos-description', '.job-posting-body', '.editcontentfield', '.contentpane'
           ];
 
           let text = '';
@@ -574,7 +578,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
           // Locate active job description container to prevent polluting sidebars/search lists
           const targetContainer = document.querySelector(
-            '#job-details, .jobs-description-content__text, .jobs-box__html-content, .jobs-description__container, .show-more-less-html__markup, #jobDescriptionText, .jobsearch-jobDescriptionText, .iCIMS_JobContent, ._description_10l3e_43, .posting-sections, #content'
+            '#job-details, .jobs-description-content__text, .jobs-box__html-content, .jobs-description__container, .show-more-less-html__markup, #jobDescriptionText, .jobsearch-jobDescriptionText, .jobsearch-JobComponent-description, #jobDescriptionSection, .iCIMS_JobContent, ._description_10l3e_43, .posting-sections, #content, #job-body, .job-sections, .JobDetails_jobDescription__uW_fK, #JobDescriptionContainer, #jobDescription, .job_description, .jss-job-description, .pos-description, .job-posting-body'
           ) || document.body;
 
           const EXCLUDED_SELECTORS = [

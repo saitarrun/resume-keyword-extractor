@@ -16,7 +16,7 @@ class SectionClassifier {
 
     // Split by newlines, or split inline headers if text was compressed
     const normalizedText = text
-      .replace(/([^\n])\s*(Basic Qualifications|Minimum Qualifications|Requirements|Required Skills|Preferred Qualifications|Nice to Have|Bonus Points|You might be a great fit if|What you['’]ll do|Responsibilities)\s*:/gi, '$1\n$2:');
+      .replace(/([^\n])\s*(Required qualifications to be successful in this role|Required qualifications|Basic Qualifications|Minimum Qualifications|Minimum Requirements|Core Requirements|Requirements|Required Skills|Essential Skills|Technical Requirements|Skills & Experience|Skills & Requirements|Skills|Preferred Qualifications|Preferred Skills|Preferred Experience|Nice to Have|Bonus Points|Bonus Qualifications|You might be a great fit if|Your future duties and responsibilities|What you['’]ll do|What you will do|Responsibilities|About the role|About us)\s*[:\-–—]?/gi, '$1\n$2:');
 
     const lines = normalizedText.split(/\n+/);
     let currentSection = 'general';
@@ -61,6 +61,9 @@ class SectionClassifier {
 
     // Required / Must-Have / Core Qualifications Patterns
     const requiredPatterns = [
+      /required qualifications to be successful/i,
+      /required qualifications/i,
+      /qualifications to be successful/i,
       /you might be a great fit/i,
       /great fit if/i,
       /good fit if/i,
@@ -84,7 +87,6 @@ class SectionClassifier {
       /what you['’]ll need/i,
       /requirements/i,
       /required skills/i,
-      /required qualifications/i,
       /core requirements/i,
       /essential skills/i,
       /essential requirements/i,
@@ -97,11 +99,16 @@ class SectionClassifier {
       /technical requirements/i,
       /skills & experience/i,
       /skills & requirements/i,
-      /job requirements/i
+      /job requirements/i,
+      /^skills\s*[:\-–—]?$/i,
+      /^technical skills\s*[:\-–—]?$/i,
+      /^tech stack\s*[:\-–—]?$/i
     ];
 
     // General / Culture / Responsibilities Patterns
     const generalPatterns = [
+      /your future duties and responsibilities/i,
+      /duties and responsibilities/i,
       /how we work/i,
       /you might, one week to the next/i,
       /what you will do/i,
@@ -124,7 +131,7 @@ class SectionClassifier {
     ];
 
     // Line-level requirement cue keywords
-    const requirementCueRegex = /(?:experience with|experience in|proficient in|proficiency in|knowledge of|familiar with|familiarity with|hands[- ]on|strong understanding|degree in|years of|expertise in|skilled in|must have|working knowledge|background in|ability to code in)/i;
+    const requirementCueRegex = /(?:experience with|experience in|proficient in|proficiency in|knowledge of|familiar with|familiarity with|hands[- ]on|strong understanding|degree in|years of|expertise in|skilled in|must have|working knowledge|background in|ability to code in|passion for|ability to)/i;
 
     for (const line of lines) {
       const trimmed = line.trim();
