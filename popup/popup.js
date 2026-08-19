@@ -17,6 +17,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   let highlightsActive = true;
   const INITIAL_VISIBLE_COUNT = 6;
 
+  // Initialize AIService
+  const aiService = typeof AIService !== 'undefined' ? new AIService() : (typeof window !== 'undefined' && window.AIService ? new window.AIService() : null);
+  if (aiService && typeof aiService.init === 'function') {
+    await aiService.init();
+  }
+
   // Load custom user keywords from chrome storage
   try {
     const stored = await chrome.storage.local.get(['jke_custom_keywords']);
@@ -332,7 +338,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Update badge counts across all 4 tabs
       updateBadgeCounts();
-
       renderCurrentScopeList();
 
       // Highlight keywords directly on the live webpage
@@ -340,9 +345,99 @@ document.addEventListener('DOMContentLoaded', async () => {
         applyInPageHighlights(tab.id, extractionResult.allKeywords);
       }
 
+      // Background AI Semantic Enrichment (Implied Architectures & Deep Stack Deduction)
+      if (aiService && aiService.isEnabled) {
+        aiService.extractSemanticSkills(pageData.text).then(aiData => {
+          if (aiData) {
+            mergeAIRefinements(aiData, tab.id);
+          }
+        }).catch(err => console.warn('AI semantic note:', err));
+      }
+
     } catch (err) {
       console.error('Scan error:', err);
       showEmptyState('Please refresh the page and try again.');
+    }
+  }
+
+  function mergeAIRefinements(aiData, tabId) {
+    if (!aiData) return;
+    const existingTerms = new Set(extractionResult.allKeywords.map(k => k.term.toLowerCase()));
+    let newItemsAdded = false;
+
+    // 1. Merge Implied Skills (e.g. Distributed Systems, Kafka from high-throughput log contexts)
+    if (Array.isArray(aiData.impliedSkills)) {
+      aiData.impliedSkills.forEach(skill => {
+        if (!skill || typeof skill !== 'string') return;
+        const lower = skill.toLowerCase().trim();
+        if (!existingTerms.has(lower) && (!extractor.learner || !extractor.learner.isBlocked(skill))) {
+          existingTerms.add(lower);
+          const item = {
+            term: skill.trim(),
+            canonicalTerm: skill.trim(),
+            type: 'Technical',
+            section: 'other',
+            isAIImplied: true,
+            frequency: 1
+          };
+          extractionResult.allKeywords.push(item);
+          extractionResult.otherKeywords.push(item);
+          newItemsAdded = true;
+        }
+      });
+    }
+
+    // 2. Merge Required & Preferred Skills found by AI
+    if (Array.isArray(aiData.requiredSkills)) {
+      aiData.requiredSkills.forEach(skill => {
+        if (!skill || typeof skill !== 'string') return;
+        const lower = skill.toLowerCase().trim();
+        if (!existingTerms.has(lower) && (!extractor.learner || !extractor.learner.isBlocked(skill))) {
+          existingTerms.add(lower);
+          const item = {
+            term: skill.trim(),
+            canonicalTerm: skill.trim(),
+            type: 'Technical',
+            section: 'required',
+            inRequired: true,
+            isAISemantic: true,
+            frequency: 1
+          };
+          extractionResult.allKeywords.push(item);
+          extractionResult.requiredKeywords.push(item);
+          newItemsAdded = true;
+        }
+      });
+    }
+
+    if (Array.isArray(aiData.preferredSkills)) {
+      aiData.preferredSkills.forEach(skill => {
+        if (!skill || typeof skill !== 'string') return;
+        const lower = skill.toLowerCase().trim();
+        if (!existingTerms.has(lower) && (!extractor.learner || !extractor.learner.isBlocked(skill))) {
+          existingTerms.add(lower);
+          const item = {
+            term: skill.trim(),
+            canonicalTerm: skill.trim(),
+            type: 'Technical',
+            section: 'preferred',
+            inPreferred: true,
+            isAISemantic: true,
+            frequency: 1
+          };
+          extractionResult.allKeywords.push(item);
+          extractionResult.preferredKeywords.push(item);
+          newItemsAdded = true;
+        }
+      });
+    }
+
+    if (newItemsAdded) {
+      updateBadgeCounts();
+      renderCurrentScopeList();
+      if (highlightsActive && tabId) {
+        applyInPageHighlights(tabId, extractionResult.allKeywords);
+      }
     }
   }
 
@@ -391,7 +486,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     container.innerHTML = displayList.map(k => {
       let scopeBadgeHtml = '';
-      if (k.isLearned) {
+      if (k.isAIImplied) {
+        scopeBadgeHtml = '<span class="tag-scope tag-ai">✨ AI Implied</span>';
+      } else if (k.isLearned) {
         scopeBadgeHtml = '<span class="tag-scope tag-learned">✨ Learned</span>';
       } else if (k.section === 'required' || k.inRequired) {
         scopeBadgeHtml = '<span class="tag-scope tag-req">Required</span>';
@@ -810,6 +907,77 @@ document.addEventListener('DOMContentLoaded', async () => {
     const bullets = list.map(k => `• ${k.term}`).join('\n');
     await copyToClipboard(bullets);
     showToast(`✓ Copied ${list.length} bullets!`);
+  });
+
+  // Settings Modal Controller
+  const settingsModal = document.getElementById('settings-modal');
+  const btnSettings = document.getElementById('btn-settings');
+  const btnCloseSettings = document.getElementById('btn-close-settings');
+  const selectProvider = document.getElementById('select-ai-provider');
+  const geminiKeyWrap = document.getElementById('gemini-key-wrap');
+  const openaiKeyWrap = document.getElementById('openai-key-wrap');
+  const inputGeminiKey = document.getElementById('input-gemini-key');
+  const inputOpenaiKey = document.getElementById('input-openai-key');
+  const toggleAiEnabled = document.getElementById('toggle-ai-enabled');
+  const btnSaveSettings = document.getElementById('btn-save-settings');
+
+  async function updateSettingsUI() {
+    if (!aiService) return;
+    const status = await aiService.getStatus();
+
+    if (toggleAiEnabled) toggleAiEnabled.checked = status.isEnabled;
+    if (selectProvider) selectProvider.value = status.currentProvider || 'auto';
+    if (inputGeminiKey) inputGeminiKey.value = aiService.geminiApiKey || '';
+    if (inputOpenaiKey) inputOpenaiKey.value = aiService.openaiApiKey || '';
+
+    const isOp = (selectProvider?.value === 'openai');
+    if (geminiKeyWrap) geminiKeyWrap.style.display = isOp ? 'none' : 'block';
+    if (openaiKeyWrap) openaiKeyWrap.style.display = isOp ? 'block' : 'none';
+
+    const dot = document.getElementById('ai-status-dot');
+    const txt = document.getElementById('ai-status-text');
+    if (status.hasGeminiNano) {
+      dot?.classList.add('active');
+      if (txt) txt.textContent = 'Chrome Gemini Nano active (On-Device Local AI)';
+    } else if (status.hasGeminiApiKey) {
+      dot?.classList.add('active');
+      if (txt) txt.textContent = 'Google Gemini Flash API connected';
+    } else if (status.hasOpenaiApiKey) {
+      dot?.classList.add('active');
+      if (txt) txt.textContent = 'OpenAI API connected';
+    } else {
+      dot?.classList.remove('active');
+      if (txt) txt.textContent = 'No API key set. Running in High-Speed Dictionary Mode.';
+    }
+  }
+
+  btnSettings?.addEventListener('click', async () => {
+    if (settingsModal) settingsModal.style.display = 'flex';
+    await updateSettingsUI();
+  });
+
+  btnCloseSettings?.addEventListener('click', () => {
+    if (settingsModal) settingsModal.style.display = 'none';
+  });
+
+  selectProvider?.addEventListener('change', () => {
+    const isOp = (selectProvider.value === 'openai');
+    if (geminiKeyWrap) geminiKeyWrap.style.display = isOp ? 'none' : 'block';
+    if (openaiKeyWrap) openaiKeyWrap.style.display = isOp ? 'block' : 'none';
+  });
+
+  btnSaveSettings?.addEventListener('click', async () => {
+    const isEnabled = toggleAiEnabled?.checked ?? true;
+    const provider = selectProvider?.value || 'auto';
+    const geminiApiKey = inputGeminiKey?.value || '';
+    const openaiApiKey = inputOpenaiKey?.value || '';
+
+    if (aiService) {
+      await aiService.saveSettings({ provider, geminiApiKey, openaiApiKey, isEnabled });
+    }
+    showToast('✓ AI Settings Saved!');
+    if (settingsModal) settingsModal.style.display = 'none';
+    scanActiveTab();
   });
 
   // Initial scan

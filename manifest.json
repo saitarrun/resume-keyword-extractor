@@ -30,6 +30,7 @@
         "src/nlp/trie.js",
         "src/nlp/dictionary.js",
         "src/nlp/adaptive_learner.js",
+        "src/ai/ai_service.js",
         "src/nlp/section_classifier.js",
         "src/nlp/extractor.js",
         "src/parsers/deep_dom_reader.js",

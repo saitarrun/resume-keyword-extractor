@@ -26,6 +26,9 @@
           <button id="btn-pick" class="tool-btn" title="Target specific element on page">
             <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg>
           </button>
+          <button id="btn-settings" class="tool-btn" title="AI & Extractor Settings">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
         </div>
       </div>
       
@@ -102,6 +105,71 @@
       </button>
     </footer>
 
+    <!-- Settings Modal Slide-over -->
+    <div id="settings-modal" class="settings-modal" style="display: none;">
+      <div class="settings-content">
+        <div class="settings-header">
+          <div class="settings-title-wrap">
+            <span class="settings-icon-badge">✨</span>
+            <span class="settings-title">AI & Intelligence Settings</span>
+          </div>
+          <button id="btn-close-settings" class="btn-close-modal">✕</button>
+        </div>
+
+        <div class="settings-body">
+          <div class="setting-row">
+            <div class="setting-text">
+              <span class="setting-label">AI Semantic Deduction</span>
+              <span class="setting-desc">Extracts implied architectures and deep tech stacks with zero false positives.</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="toggle-ai-enabled" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="setting-group">
+            <label class="input-label" for="select-ai-provider">AI Engine Provider</label>
+            <select id="select-ai-provider" class="custom-select">
+              <option value="auto">Auto (Gemini Nano -> Free Gemini API)</option>
+              <option value="gemini_nano">Chrome Built-in AI (Gemini Nano on-device)</option>
+              <option value="gemini_api">Google Gemini Flash API (Free)</option>
+              <option value="openai">OpenAI API (GPT-4o mini)</option>
+            </select>
+          </div>
+
+          <div id="gemini-key-wrap" class="setting-group">
+            <div class="label-row">
+              <label class="input-label" for="input-gemini-key">Google Gemini API Key</label>
+              <a href="https://aistudio.google.com/app/apikey" target="_blank" class="link-key">Get Free Key ↗</a>
+            </div>
+            <input type="password" id="input-gemini-key" class="settings-input" placeholder="AIzaSy...">
+          </div>
+
+          <div id="openai-key-wrap" class="setting-group" style="display: none;">
+            <div class="label-row">
+              <label class="input-label" for="input-openai-key">OpenAI API Key</label>
+              <a href="https://platform.openai.com/api-keys" target="_blank" class="link-key">Get Key ↗</a>
+            </div>
+            <input type="password" id="input-openai-key" class="settings-input" placeholder="sk-...">
+          </div>
+
+          <div id="ai-status-card" class="ai-status-card">
+            <div class="status-dot-wrap">
+              <span id="ai-status-dot" class="status-dot"></span>
+              <span id="ai-status-text" class="status-text">Checking AI engine status...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-footer">
+          <button id="btn-save-settings" class="btn-primary btn-save">
+            <span>Save & Apply AI Engine</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Toast Feedback Notification -->
     <div id="toast" class="toast">Copied to clipboard!</div>
 
@@ -110,6 +178,7 @@
   <script src="../src/nlp/trie.js"></script>
   <script src="../src/nlp/dictionary.js"></script>
   <script src="../src/nlp/adaptive_learner.js"></script>
+  <script src="../src/ai/ai_service.js"></script>
   <script src="../src/nlp/section_classifier.js"></script>
   <script src="../src/nlp/extractor.js"></script>
   <script src="../src/parsers/deep_dom_reader.js"></script>
