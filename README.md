@@ -1,14 +1,14 @@
 <div align="center">
 
-  <img src="assets/banner.svg" alt="Resume Skill Matcher Banner" width="100%" />
+  <img src="assets/banner.svg" alt="Resume Keyword Extractor Banner" width="100%" />
 
   <br/><br/>
 
-  [![Manifest V3](https://img.shields.io/badge/Manifest_V3-Chrome_Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/saitarrun/resume-skill-matcher)
-  [![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://github.com/saitarrun/resume-skill-matcher)
-  [![ATS Support](https://img.shields.io/badge/ATS_Platforms-20+-6366F1?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/saitarrun/resume-skill-matcher)
-  [![Privacy First](https://img.shields.io/badge/Privacy-100%25_Offline-10B981?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/saitarrun/resume-skill-matcher)
-  [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/saitarrun/resume-skill-matcher/blob/main/LICENSE)
+  [![Manifest V3](https://img.shields.io/badge/Manifest_V3-Chrome_Extension-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/saitarrun/resume-keyword-extractor)
+  [![JavaScript](https://img.shields.io/badge/JavaScript-ES2024-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://github.com/saitarrun/resume-keyword-extractor)
+  [![ATS Support](https://img.shields.io/badge/ATS_Platforms-20+-6366F1?style=for-the-badge&logo=linkedin&logoColor=white)](https://github.com/saitarrun/resume-keyword-extractor)
+  [![Privacy First](https://img.shields.io/badge/Privacy-100%25_Offline-10B981?style=for-the-badge&logo=shield&logoColor=white)](https://github.com/saitarrun/resume-keyword-extractor)
+  [![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](https://github.com/saitarrun/resume-keyword-extractor/blob/main/LICENSE)
 
   <br/>
 
@@ -31,7 +31,7 @@
 
 ## 🌟 Overview
 
-**Resume Skill Matcher** is built for software engineers, data scientists, and tech professionals looking to streamline resume tailoring and application optimization.
+**Resume Keyword Extractor** is built for software engineers, data scientists, and tech professionals looking to streamline resume tailoring and application optimization.
 
 Unlike generic parsers that flood users with soft skills (e.g., *"team player"*, *"problem solver"*) or break on complex multi-pane job boards, this extension employs a **100% technical ontology** and **deep DOM container isolation** to surface the exact languages, frameworks, cloud tools, databases, and architectures recruiters and ATS screeners look for.
 
@@ -42,7 +42,7 @@ Unlike generic parsers that flood users with soft skills (e.g., *"team player"*,
 ### Load in Google Chrome (Developer Mode)
 1. **Clone this repository**:
    ```bash
-   git clone https://github.com/saitarrun/resume-skill-matcher.git
+   git clone https://github.com/saitarrun/resume-keyword-extractor.git
    ```
 2. Open Google Chrome and navigate to:
    ```text
@@ -50,8 +50,8 @@ Unlike generic parsers that flood users with soft skills (e.g., *"team player"*,
    ```
 3. Enable **Developer mode** using the toggle switch in the upper-right corner.
 4. Click the **Load unpacked** button.
-5. Select the cloned `resume-skill-matcher` folder.
-6. Pin **Resume Skill Matcher** to your Chrome toolbar for instant 1-click access!
+5. Select the cloned `resume-keyword-extractor` folder.
+6. Pin **Resume Keyword Extractor** to your Chrome toolbar for instant 1-click access!
 
 ---
 
@@ -119,7 +119,7 @@ graph TD
 ## 🏗️ Architecture & Engineering Highlights
 
 ```text
-resume-skill-matcher/
+resume-keyword-extractor/
 ├── manifest.json                  # Manifest V3 Configuration
 ├── popup/
 │   ├── popup.html                 # Glassmorphism Popup Interface

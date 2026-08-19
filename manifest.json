@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Resume Skill Matcher - ATS Keyword Extractor",
-  "version": "2.3.0",
-  "description": "AI & ATS Resume Skill Matcher. Scans job postings across LinkedIn, Indeed, Greenhouse, and 20+ ATS platforms to extract required/preferred technical skills and highlight in-page.",
+  "name": "Resume Keyword Extractor - ATS Skill Parser",
+  "version": "2.4.0",
+  "description": "Resume Keyword Extractor. Scans job postings across LinkedIn, Indeed, Greenhouse, and 20+ ATS platforms to extract required/preferred technical skills and highlight in-page.",
   "permissions": [
     "activeTab",
     "scripting",

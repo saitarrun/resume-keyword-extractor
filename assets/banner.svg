@@ -70,7 +70,7 @@
 
   <!-- Main Title -->
   <text x="80" y="145" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="44" font-weight="800" letter-spacing="-0.5">
-    Resume Skill Matcher
+    Resume Keyword Extractor
   </text>
 
   <!-- Gradient Subtitle -->
