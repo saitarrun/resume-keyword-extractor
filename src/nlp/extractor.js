@@ -161,31 +161,22 @@ class KeywordExtractor {
 
         const isEducationRule = rule.type === 'Education';
         const matchedInEducation = isEducationRule || !!(sections.educationText && rule.testRegex.test(sections.educationText));
-        const matchedInRequired = !!(sections.requiredText && rule.testRegex.test(sections.requiredText));
-        const matchedInRequirementCues = !!(sections.requirementLinesText && rule.testRegex.test(sections.requirementLinesText));
         const matchedInGeneral = !!(sections.generalText && rule.testRegex.test(sections.generalText));
 
         let inRequired = false;
         let inEducation = false;
         let inGeneral = false;
-        let primarySection = 'other';
+        let primarySection = 'required';
 
         if (matchedInEducation || isEducationRule) {
           inEducation = true;
           primarySection = 'education';
-          if (matchedInRequired) inRequired = true;
-          if (matchedInGeneral) inGeneral = true;
-        } else if (matchedInRequired) {
-          inRequired = true;
-          primarySection = 'required';
-          if (matchedInGeneral) inGeneral = true;
-        } else if (matchedInRequirementCues) {
-          inRequired = true;
-          primarySection = 'required';
           if (matchedInGeneral) inGeneral = true;
         } else {
-          inGeneral = true;
-          primarySection = 'other';
+          // All Technical keywords are strictly classified under Required
+          inRequired = true;
+          primarySection = 'required';
+          if (matchedInGeneral) inGeneral = true;
         }
 
         const dedupeKey = bestExactText.toLowerCase();
@@ -200,8 +191,7 @@ class KeywordExtractor {
           if (inEducation || isEducationRule) {
             existing.inEducation = true;
             existing.section = 'education';
-          }
-          if (inRequired && !existing.inEducation) {
+          } else {
             existing.inRequired = true;
             existing.section = 'required';
           }
@@ -227,8 +217,8 @@ class KeywordExtractor {
 
     const allKeywords = Array.from(seenTermMap.values());
     const educationKeywords = allKeywords.filter(k => k.type === 'Education' || k.inEducation || k.section === 'education');
-    const requiredKeywords = allKeywords.filter(k => (k.inRequired || k.section === 'required') && k.type !== 'Education' && k.section !== 'education');
-    const otherKeywords = allKeywords.filter(k => k.section === 'other' || (!k.inRequired && !k.inEducation && k.type !== 'Education'));
+    const requiredKeywords = allKeywords.filter(k => k.type !== 'Education' && k.section !== 'education');
+    const otherKeywords = allKeywords.filter(k => k.section === 'other' || k.type === 'Other');
 
     // Sort all arrays strictly by frequency descending
     allKeywords.sort((a, b) => b.frequency - a.frequency);

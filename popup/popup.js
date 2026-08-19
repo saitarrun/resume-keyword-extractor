@@ -495,13 +495,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             term: skill.trim(),
             canonicalTerm: skill.trim(),
             type: 'Technical',
-            section: 'other',
-            inGeneral: true,
+            section: 'required',
+            inRequired: true,
             isAISemantic: true,
             frequency: 1
           };
           extractionResult.allKeywords.push(item);
-          extractionResult.otherKeywords.push(item);
+          extractionResult.requiredKeywords.push(item);
           newItemsAdded = true;
         }
       });
