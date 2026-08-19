@@ -240,44 +240,66 @@ document.addEventListener('DOMContentLoaded', async () => {
           let title = '';
           let company = '';
 
-          // Exact active Job Title selectors
-          const titleSelectors = [
-            '.job-details-jobs-unified-top-card__job-title',
-            '.jobs-unified-top-card__job-title',
-            '.jobs-search__job-details--container h1',
-            'h1.jobsearch-JobInfoHeader-title',
-            '[data-testid="simpler-jobTitle"]',
-            'h1.company-title', 'h1.job-title', '.job-name h1',
-            '.iCIMS_Header h1', '.iCIMS_JobTitle',
-            '[data-testid="job-title"]',
-            '.app-title', '.posting-headline h2', '[data-automation-id="jobPostingHeader"]',
-            'h1'
-          ];
+          // 1. Detect Active Detail Pane First (LinkedIn, Indeed split view, etc.)
+          const activeDetailPane = document.querySelector(
+            '.scaffold-layout__detail, .jobs-search__job-details, .jobs-search-two-pane__job-details, .jobsearch-JobComponent, #jobsearch-ViewjobPaneWrapper'
+          );
 
-          for (const sel of titleSelectors) {
-            const el = document.querySelector(sel);
-            if (el && el.innerText && el.innerText.trim()) {
-              title = el.innerText.trim();
-              break;
+          if (activeDetailPane) {
+            const paneTitle = activeDetailPane.querySelector(
+              '.job-details-jobs-unified-top-card__job-title, .jobs-unified-top-card__job-title, [data-view-name="job-details-top-card"] h1, h1.jobsearch-JobInfoHeader-title, h1'
+            );
+            if (paneTitle && paneTitle.innerText && paneTitle.innerText.trim()) {
+              title = paneTitle.innerText.trim();
+            }
+
+            const paneCompany = activeDetailPane.querySelector(
+              '.job-details-jobs-unified-top-card__company-name, .jobs-unified-top-card__company-name, [data-view-name="job-details-top-card"] a, .jobs-details-top-card__company-url, [data-testid="inlineHeader-companyName"], [data-testid="jobsearch-CompanyAvatar-button"], .jobsearch-CompanyInfoContainer a'
+            );
+            if (paneCompany && paneCompany.innerText && paneCompany.innerText.trim()) {
+              company = paneCompany.innerText.trim();
             }
           }
 
-          // Exact active Company selectors
-          const companySelectors = [
-            '.job-details-jobs-unified-top-card__company-name',
-            '.jobs-unified-top-card__company-name',
-            '.jobs-details-top-card__company-url',
-            '[data-testid="inlineHeader-companyName"]',
-            '.company-name', '.company-details h2',
-            '.iCIMS_CompanyHeader', '._companyName_10l3e_13',
-            '.main-header-logo', '[data-automation-id="companyName"]'
-          ];
+          // 2. Global Selectors if still not found
+          if (!title) {
+            const titleSelectors = [
+              '.job-details-jobs-unified-top-card__job-title',
+              '.jobs-unified-top-card__job-title',
+              '.jobs-search__job-details--container h1',
+              'h1.jobsearch-JobInfoHeader-title',
+              '[data-testid="simpler-jobTitle"]',
+              'h1.company-title', 'h1.job-title', '.job-name h1',
+              '.iCIMS_Header h1', '.iCIMS_JobTitle',
+              '[data-testid="job-title"]',
+              '.app-title', '.posting-headline h2', '[data-automation-id="jobPostingHeader"]',
+              'h1'
+            ];
+            for (const sel of titleSelectors) {
+              const el = document.querySelector(sel);
+              if (el && el.innerText && el.innerText.trim()) {
+                title = el.innerText.trim();
+                break;
+              }
+            }
+          }
 
-          for (const sel of companySelectors) {
-            const el = document.querySelector(sel);
-            if (el && el.innerText && el.innerText.trim()) {
-              company = el.innerText.trim();
-              break;
+          if (!company) {
+            const companySelectors = [
+              '.job-details-jobs-unified-top-card__company-name',
+              '.jobs-unified-top-card__company-name',
+              '.jobs-details-top-card__company-url',
+              '[data-testid="inlineHeader-companyName"]',
+              '.company-name', '.company-details h2',
+              '.iCIMS_CompanyHeader', '._companyName_10l3e_13',
+              '.main-header-logo', '[data-automation-id="companyName"]'
+            ];
+            for (const sel of companySelectors) {
+              const el = document.querySelector(sel);
+              if (el && el.innerText && el.innerText.trim()) {
+                company = el.innerText.trim();
+                break;
+              }
             }
           }
 
@@ -296,26 +318,44 @@ document.addEventListener('DOMContentLoaded', async () => {
             text = extractDeepText(mainContent);
           }
 
+          // Clean & Parse from Description Text or Document Title
           if (!title && text) {
             const match = text.match(/(?:Job Title|Position Title|Position|Role)\s*:\s*([^\n\r]+)/i);
             if (match && match[1]) title = match[1].trim();
-            else title = document.title.split(/[-|•–]/)[0].trim() || 'Job Posting';
           }
 
           if (!company && text) {
             const match = text.match(/(?:Location|Company|Employer)\s*:\s*([^\n\r,]+)/i);
             if (match && match[1]) company = match[1].trim();
-            else {
-              try {
-                const host = window.location.hostname.replace('www.', '').split('.')[0];
-                company = host.charAt(0).toUpperCase() + host.slice(1);
-              } catch (_) {
-                company = '';
-              }
+          }
+
+          // Intelligent document.title fallback (e.g. "Staff Software Engineer - Databricks | LinkedIn")
+          if ((!title || !company) && document.title) {
+            const cleanDocTitle = document.title.replace(/\s*\|\s*(LinkedIn|Indeed|Glassdoor|Workday|Greenhouse|Lever|Job Board|Careers)\s*$/i, '').trim();
+            const parts = cleanDocTitle.split(/\s*[-•–]\s*/);
+            if (!title && parts.length > 0 && parts[0]) {
+              title = parts[0].trim();
+            }
+            if (!company && parts.length > 1 && parts[parts.length - 1]) {
+              company = parts[parts.length - 1].trim();
             }
           }
 
-          return { text: text || '', title: title || 'Job Posting', company: company || '' };
+          // Clean Company string (strip ratings like "4.5 ★" or reviews)
+          if (company) {
+            company = company.replace(/[\d.]+\s*★.*$/g, '').replace(/\(.*?\)/g, '').split(/[-•|]/)[0].trim();
+          }
+
+          if (!company) {
+            try {
+              const host = window.location.hostname.replace('www.', '').split('.')[0];
+              if (host && !['linkedin', 'indeed', 'glassdoor', 'greenhouse', 'lever', 'workday', 'ashbyhq', 'icims', 'smartrecruiters', 'wellfound'].includes(host.toLowerCase())) {
+                company = host.charAt(0).toUpperCase() + host.slice(1);
+              }
+            } catch (_) {}
+          }
+
+          return { text: text || '', title: title || 'Job Role', company: company || 'Company' };
         }
       });
 
@@ -333,8 +373,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       extractor.setCustomKeywords(customKeywords);
       extractionResult = extractor.extract(pageData.text);
 
-      jobTitleEl.textContent = pageData.title || 'Job Posting';
-      jobCompanyEl.textContent = pageData.company || 'Job Post';
+      jobTitleEl.textContent = pageData.title || 'Job Role';
+      jobCompanyEl.textContent = pageData.company || 'Company';
 
       // Update badge counts across all 4 tabs
       updateBadgeCounts();
@@ -585,8 +625,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   function showEmptyState(msg) {
-    document.getElementById('job-title').textContent = 'No keywords detected';
-    document.getElementById('job-company').textContent = 'Open a job post in Chrome to scan';
+    document.getElementById('job-title').textContent = 'No active job detected';
+    document.getElementById('job-company').textContent = 'Ready to scan';
     document.getElementById('tab-count-all').textContent = '0';
     document.getElementById('tab-count-required').textContent = '0';
     document.getElementById('tab-count-preferred').textContent = '0';
