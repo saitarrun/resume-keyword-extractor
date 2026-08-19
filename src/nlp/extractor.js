@@ -116,28 +116,18 @@ class KeywordExtractor {
       if (!rule.testRegex.test(cleanText)) continue;
 
       rule.matchRegex.lastIndex = 0;
-      let totalFreq = 0;
       const exactTextOccurrences = new Map();
       let m;
 
       while ((m = rule.matchRegex.exec(cleanText)) !== null) {
-        totalFreq++;
         const exactText = (m[1] || m[0]).trim();
-        if (exactText) {
+        if (exactText && exactText.length >= 2) {
           exactTextOccurrences.set(exactText, (exactTextOccurrences.get(exactText) || 0) + 1);
         }
       }
 
-      if (totalFreq > 0) {
-        // Extract the exact verbatim grammatical spelling and capitalization from the text
-        let bestExactText = rule.term;
-        let maxCount = 0;
-        for (const [exactVariant, count] of exactTextOccurrences.entries()) {
-          if (count > maxCount) {
-            maxCount = count;
-            bestExactText = exactVariant;
-          }
-        }
+      for (const [exactVariant, count] of exactTextOccurrences.entries()) {
+        let bestExactText = exactVariant;
 
         // Disambiguate short English homographs (e.g. Go programming vs English verb "go")
         if (rule.term === 'Go / Golang') {
@@ -183,11 +173,7 @@ class KeywordExtractor {
 
         if (seenTermMap.has(dedupeKey)) {
           const existing = seenTermMap.get(dedupeKey);
-          if (totalFreq > existing.frequency) {
-            existing.frequency = totalFreq;
-            existing.term = bestExactText;
-            existing.canonicalTerm = rule.term;
-          }
+          existing.frequency += count;
           if (inEducation || isEducationRule) {
             existing.inEducation = true;
             existing.section = 'education';
@@ -197,7 +183,6 @@ class KeywordExtractor {
           }
           if (inGeneral) existing.inGeneral = true;
         } else {
-          const finalFrequency = maxCount || totalFreq;
           const keywordObj = {
             term: bestExactText, // Exact verbatim spelling & capitalization as found in the text
             canonicalTerm: rule.term,
@@ -207,7 +192,7 @@ class KeywordExtractor {
             inEducation,
             inGeneral,
             isLearned: false,
-            frequency: finalFrequency,
+            frequency: count,
             aliases: rule.aliases
           };
           seenTermMap.set(dedupeKey, keywordObj);
