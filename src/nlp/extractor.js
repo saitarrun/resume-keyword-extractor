@@ -1,11 +1,18 @@
-// Hybrid Multi-Pass Keyword Extractor with Exact In-Text Spelling & Capitalization Preservation
-// Precise Section Classification (Required, Preferred, Other)
+// Hybrid Multi-Pass Keyword Extractor with Real-Time Adaptive Learning & Exact In-Text Case Preservation
+// Incorporates Section Classification (Required, Preferred, Other) and Unsupervised Entity Discovery
 
 class KeywordExtractor {
   constructor(dictionary = (typeof window !== 'undefined' ? window.SKILL_DICTIONARY : []) || [], customKeywords = []) {
     this.dictionary = [...dictionary];
     this.customKeywords = customKeywords;
     this.compiledRules = [];
+    this.knownTermsSet = new Set();
+    this.learner = typeof AdaptiveLearner !== 'undefined' ? new AdaptiveLearner() : (typeof window !== 'undefined' && window.AdaptiveLearner ? new window.AdaptiveLearner() : null);
+    
+    if (this.learner && typeof this.learner.init === 'function') {
+      this.learner.init().catch(() => {});
+    }
+
     this.initRules();
   }
 
@@ -14,16 +21,24 @@ class KeywordExtractor {
     this.initRules();
   }
 
+  setLearner(learner) {
+    if (learner) {
+      this.learner = learner;
+    }
+  }
+
   initRules() {
     const allEntries = [...this.dictionary];
+    this.knownTermsSet = new Set();
 
     if (Array.isArray(this.customKeywords) && this.customKeywords.length > 0) {
       for (const custom of this.customKeywords) {
         if (!custom || !custom.term) continue;
+        const aliases = custom.aliases || (this.learner ? this.learner.generateSmartAliases(custom.term) : [custom.term]);
         allEntries.push({
           term: custom.term,
           type: 'Technical',
-          aliases: custom.aliases || [custom.term]
+          aliases
         });
       }
     }
@@ -32,6 +47,9 @@ class KeywordExtractor {
       const allAliases = [item.term, ...(item.aliases || [])];
       const cleanedAliases = allAliases.map(a => a.toLowerCase().replace(/[\u2018\u2019]/g, "'").trim());
       const uniqueAliases = Array.from(new Set(cleanedAliases)).filter(a => a.length >= 1);
+
+      uniqueAliases.forEach(a => this.knownTermsSet.add(a));
+      this.knownTermsSet.add(item.term.toLowerCase().trim());
 
       uniqueAliases.sort((a, b) => b.length - a.length);
 
@@ -90,6 +108,9 @@ class KeywordExtractor {
     const seenTermMap = new Map();
 
     for (const rule of this.compiledRules) {
+      // Check if blocked by user learning preferences
+      if (this.learner && this.learner.isBlocked(rule.term)) continue;
+
       // Fast-path: quickly skip rules not present in document (10x-15x faster execution)
       if (!rule.testRegex.test(cleanText)) continue;
 
@@ -116,6 +137,9 @@ class KeywordExtractor {
             bestExactText = exactVariant;
           }
         }
+
+        // Check if verbatim variant is blocked
+        if (this.learner && this.learner.isBlocked(bestExactText)) continue;
 
         const matchedInRequired = !!(sections.requiredText && rule.testRegex.test(sections.requiredText));
         const matchedInRequirementCues = !!(sections.requirementLinesText && rule.testRegex.test(sections.requirementLinesText));
@@ -173,10 +197,30 @@ class KeywordExtractor {
             inRequired,
             inPreferred,
             inGeneral,
+            isLearned: false,
             frequency: finalFrequency,
             aliases: rule.aliases
           };
           seenTermMap.set(dedupeKey, keywordObj);
+        }
+      }
+    }
+
+    // 2. Real-Time Autonomous Skill Discovery (Unsupervised in-page pattern mining)
+    if (this.learner && typeof this.learner.discoverNewSkills === 'function') {
+      const discovered = this.learner.discoverNewSkills(cleanText, this.knownTermsSet);
+      for (const disc of discovered) {
+        const dedupeKey = disc.term.toLowerCase();
+        if (!seenTermMap.has(dedupeKey) && !this.learner.isBlocked(disc.term)) {
+          // Check section placement for discovered term
+          const termRegex = new RegExp(`(?<![a-zA-Z0-9])(${disc.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(?![a-zA-Z0-9])`, 'i');
+          const inReq = !!(sections.requiredText && termRegex.test(sections.requiredText)) || !!(sections.requirementLinesText && termRegex.test(sections.requirementLinesText));
+          const inPref = !!(sections.preferredText && termRegex.test(sections.preferredText));
+          
+          disc.section = inReq ? 'required' : (inPref ? 'preferred' : 'other');
+          disc.inRequired = inReq;
+          disc.inPreferred = inPref;
+          seenTermMap.set(dedupeKey, disc);
         }
       }
     }

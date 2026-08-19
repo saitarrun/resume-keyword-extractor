@@ -390,7 +390,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     container.innerHTML = displayList.map(k => {
       let scopeBadgeHtml = '';
-      if (k.section === 'required' || k.inRequired) {
+      if (k.isLearned) {
+        scopeBadgeHtml = '<span class="tag-scope tag-learned">✨ Learned</span>';
+      } else if (k.section === 'required' || k.inRequired) {
         scopeBadgeHtml = '<span class="tag-scope tag-req">Required</span>';
       } else if (k.section === 'preferred' || k.inPreferred) {
         scopeBadgeHtml = '<span class="tag-scope tag-pref">Preferred</span>';
@@ -411,7 +413,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="skill-badges-wrap">
             ${scopeBadgeHtml}
             <span class="tag-freq">${k.frequency}x</span>
-            <button class="btn-remove-item" data-term="${k.term}" title="Dismiss keyword">✕</button>
+            <button class="btn-remove-item" data-term="${k.term}" title="Dismiss & block keyword">✕</button>
           </div>
         </div>
       `;
@@ -458,17 +460,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     });
 
-    // Dismiss keyword on click of '✕'
+    // Dismiss keyword on click of '✕' (Adaptive Negative Reinforcement)
     container.querySelectorAll('.btn-remove-item').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const term = btn.dataset.term;
+        if (extractor.learner && typeof extractor.learner.blockKeyword === 'function') {
+          extractor.learner.blockKeyword(term);
+        }
         extractionResult.allKeywords = extractionResult.allKeywords.filter(k => k.term !== term);
         extractionResult.requiredKeywords = extractionResult.requiredKeywords.filter(k => k.term !== term);
         extractionResult.preferredKeywords = extractionResult.preferredKeywords.filter(k => k.term !== term);
         extractionResult.otherKeywords = extractionResult.otherKeywords.filter(k => k.term !== term);
         updateBadgeCounts();
         renderCurrentScopeList();
+        showToast(`Learned: "${term}" will be suppressed`);
       });
     });
   }
@@ -721,8 +727,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await chrome.scripting.executeScript({
           target: { tabId: tab.id },
           files: [
-            'src/nlp/trie.js', 'src/nlp/dictionary.js', 'src/nlp/section_classifier.js',
-            'src/nlp/extractor.js', 'src/parsers/deep_dom_reader.js',
+            'src/nlp/trie.js', 'src/nlp/dictionary.js', 'src/nlp/adaptive_learner.js',
+            'src/nlp/section_classifier.js', 'src/nlp/extractor.js', 'src/parsers/deep_dom_reader.js',
             'src/parsers/portal_registry.js', 'src/parsers/highlighter.js',
             'src/parsers/element_picker.js', 'src/content/content_script.js'
           ]

@@ -483,6 +483,12 @@ body::after {
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
+.tag-learned {
+  background: rgba(243, 232, 255, 0.95);
+  color: #7e22ce;
+  border: 1px solid rgba(216, 180, 254, 0.8);
+}
+
 .tag-freq {
   font-size: 10px;
   font-weight: 700;
