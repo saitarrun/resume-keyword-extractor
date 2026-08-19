@@ -88,11 +88,11 @@ class KeywordExtractor {
       return {
         allKeywords: [],
         requiredKeywords: [],
-        preferredKeywords: [],
+        educationKeywords: [],
         otherKeywords: [],
         totalCount: 0,
         requiredCount: 0,
-        preferredCount: 0,
+        educationCount: 0,
         otherCount: 0
       };
     }
@@ -101,7 +101,7 @@ class KeywordExtractor {
 
     // Section classification
     const classifier = typeof SectionClassifier !== 'undefined' ? SectionClassifier : (typeof window !== 'undefined' ? window.SectionClassifier : null);
-    let sections = { requiredText: '', preferredText: '', generalText: cleanText, requirementLinesText: '', hasExplicitSections: false };
+    let sections = { requiredText: '', educationText: '', preferredText: '', generalText: cleanText, requirementLinesText: '', hasExplicitSections: false };
     if (classifier && typeof classifier.classify === 'function') {
       sections = classifier.classify(cleanText);
     }
@@ -129,7 +129,6 @@ class KeywordExtractor {
       }
 
       if (totalFreq > 0) {
-        // Extract the exact verbatim grammatical spelling and capitalization from the text
         // Extract the exact verbatim grammatical spelling and capitalization from the text
         let bestExactText = rule.term;
         let maxCount = 0;
@@ -160,24 +159,25 @@ class KeywordExtractor {
         // Check if verbatim variant is blocked
         if (this.learner && this.learner.isBlocked(bestExactText)) continue;
 
+        const isEducationRule = rule.type === 'Education';
+        const matchedInEducation = isEducationRule || !!(sections.educationText && rule.testRegex.test(sections.educationText));
         const matchedInRequired = !!(sections.requiredText && rule.testRegex.test(sections.requiredText));
         const matchedInRequirementCues = !!(sections.requirementLinesText && rule.testRegex.test(sections.requirementLinesText));
-        const matchedInPreferred = !!(sections.preferredText && rule.testRegex.test(sections.preferredText));
         const matchedInGeneral = !!(sections.generalText && rule.testRegex.test(sections.generalText));
 
         let inRequired = false;
-        let inPreferred = false;
+        let inEducation = false;
         let inGeneral = false;
         let primarySection = 'other';
 
-        if (matchedInRequired) {
+        if (matchedInEducation || isEducationRule) {
+          inEducation = true;
+          primarySection = 'education';
+          if (matchedInRequired) inRequired = true;
+          if (matchedInGeneral) inGeneral = true;
+        } else if (matchedInRequired) {
           inRequired = true;
           primarySection = 'required';
-          if (matchedInPreferred) inPreferred = true;
-          if (matchedInGeneral) inGeneral = true;
-        } else if (matchedInPreferred) {
-          inPreferred = true;
-          primarySection = 'preferred';
           if (matchedInGeneral) inGeneral = true;
         } else if (matchedInRequirementCues) {
           inRequired = true;
@@ -197,13 +197,13 @@ class KeywordExtractor {
             existing.term = bestExactText;
             existing.canonicalTerm = rule.term;
           }
-          if (inRequired) {
+          if (inEducation || isEducationRule) {
+            existing.inEducation = true;
+            existing.section = 'education';
+          }
+          if (inRequired && !existing.inEducation) {
             existing.inRequired = true;
             existing.section = 'required';
-          }
-          if (inPreferred) {
-            existing.inPreferred = true;
-            if (!existing.inRequired) existing.section = 'preferred';
           }
           if (inGeneral) existing.inGeneral = true;
         } else {
@@ -214,7 +214,7 @@ class KeywordExtractor {
             type: rule.type,
             section: primarySection,
             inRequired,
-            inPreferred,
+            inEducation,
             inGeneral,
             isLearned: false,
             frequency: finalFrequency,
@@ -226,24 +226,24 @@ class KeywordExtractor {
     }
 
     const allKeywords = Array.from(seenTermMap.values());
-    const requiredKeywords = allKeywords.filter(k => k.inRequired || k.section === 'required');
-    const preferredKeywords = allKeywords.filter(k => k.inPreferred || k.section === 'preferred');
-    const otherKeywords = allKeywords.filter(k => k.section === 'other' || (!k.inRequired && !k.inPreferred));
+    const educationKeywords = allKeywords.filter(k => k.type === 'Education' || k.inEducation || k.section === 'education');
+    const requiredKeywords = allKeywords.filter(k => (k.inRequired || k.section === 'required') && k.type !== 'Education' && k.section !== 'education');
+    const otherKeywords = allKeywords.filter(k => k.section === 'other' || (!k.inRequired && !k.inEducation && k.type !== 'Education'));
 
     // Sort all arrays strictly by frequency descending
     allKeywords.sort((a, b) => b.frequency - a.frequency);
     requiredKeywords.sort((a, b) => b.frequency - a.frequency);
-    preferredKeywords.sort((a, b) => b.frequency - a.frequency);
+    educationKeywords.sort((a, b) => b.frequency - a.frequency);
     otherKeywords.sort((a, b) => b.frequency - a.frequency);
 
     return {
       allKeywords,
       requiredKeywords,
-      preferredKeywords,
+      educationKeywords,
       otherKeywords,
       totalCount: allKeywords.length,
       requiredCount: requiredKeywords.length,
-      preferredCount: preferredKeywords.length,
+      educationCount: educationKeywords.length,
       otherCount: otherKeywords.length
     };
   }

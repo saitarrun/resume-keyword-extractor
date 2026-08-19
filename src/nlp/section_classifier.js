@@ -23,9 +23,25 @@ class SectionClassifier {
     let hasExplicitSections = false;
 
     const requiredLines = [];
+    const educationLines = [];
     const preferredLines = [];
     const generalLines = [];
     const requirementCuesLines = [];
+
+    // Education / Degree Patterns
+    const educationPatterns = [
+      /^education\s*[:\-–—]?$/i,
+      /^educational requirements\s*[:\-–—]?$/i,
+      /^education & experience\s*[:\-–—]?$/i,
+      /^degree requirements\s*[:\-–—]?$/i,
+      /^academic background\s*[:\-–—]?$/i,
+      /^education \/ certifications\s*[:\-–—]?$/i,
+      /^minimum education\s*[:\-–—]?$/i,
+      /education & qualifications/i,
+      /academic requirements/i,
+      /degree & education/i,
+      /education:/i
+    ];
 
     // Preferred / Nice-to-Have Patterns
     const preferredPatterns = [
@@ -139,17 +155,29 @@ class SectionClassifier {
 
       let transitionFound = false;
 
-      // 1. Check Preferred first
-      for (const p of preferredPatterns) {
-        if (p.test(trimmed) && trimmed.length < 120) {
-          currentSection = 'preferred';
+      // 1. Check Education first
+      for (const e of educationPatterns) {
+        if (e.test(trimmed) && trimmed.length < 120) {
+          currentSection = 'education';
           transitionFound = true;
           hasExplicitSections = true;
           break;
         }
       }
 
-      // 2. Check Required / Great Fit
+      // 2. Check Preferred
+      if (!transitionFound) {
+        for (const p of preferredPatterns) {
+          if (p.test(trimmed) && trimmed.length < 120) {
+            currentSection = 'preferred';
+            transitionFound = true;
+            hasExplicitSections = true;
+            break;
+          }
+        }
+      }
+
+      // 3. Check Required / Great Fit
       if (!transitionFound) {
         for (const r of requiredPatterns) {
           if (r.test(trimmed) && trimmed.length < 120) {
@@ -161,7 +189,7 @@ class SectionClassifier {
         }
       }
 
-      // 3. Check General / Duties / Culture
+      // 4. Check General / Duties / Culture
       if (!transitionFound) {
         for (const g of generalPatterns) {
           if (g.test(trimmed) && trimmed.length < 120) {
@@ -172,11 +200,13 @@ class SectionClassifier {
         }
       }
 
-      if (currentSection !== 'preferred' && requirementCueRegex.test(trimmed)) {
+      if (currentSection !== 'preferred' && currentSection !== 'education' && requirementCueRegex.test(trimmed)) {
         requirementCuesLines.push(trimmed);
       }
 
-      if (currentSection === 'required') {
+      if (currentSection === 'education') {
+        educationLines.push(trimmed);
+      } else if (currentSection === 'required') {
         requiredLines.push(trimmed);
       } else if (currentSection === 'preferred') {
         preferredLines.push(trimmed);
@@ -187,6 +217,7 @@ class SectionClassifier {
 
     return {
       requiredText: requiredLines.join('\n'),
+      educationText: educationLines.join('\n'),
       preferredText: preferredLines.join('\n'),
       generalText: generalLines.join('\n'),
       requirementLinesText: requirementCuesLines.join('\n'),

@@ -211,8 +211,13 @@ const SKILL_DICTIONARY = [
   // =========================================================================
   // 14. EDUCATION & TECHNICAL DEGREES
   // =========================================================================
-  { term: "Bachelor's Degree (CS/STEM)", aliases: ["computer science, engineering, mathematics", "ba in computer science", "bs in computer science", "computer science degree", "engineering degree", "bachelor's degree", "bachelors degree", "stem degree", "bachelor's", "bachelors", "b.tech", "b.s.", "b.e."], type: 'Technical' },
-  { term: "Master's Degree (CS/STEM)", aliases: ["ms in computer science", "master's degree", "masters degree", "graduate degree", "master's", "masters", "m.tech", "doctorate", "m.s.", "phd"], type: 'Technical' }
+  { term: "Bachelor's Degree (CS/STEM)", aliases: ["computer science, engineering, mathematics", "bachelor's degree in computer science", "bachelors degree in computer science", "ba in computer science", "bs in computer science", "bs in cs", "b.s. in computer science", "b.s. in cs", "bachelor of science", "bachelor's degree", "bachelors degree", "stem degree", "bachelor's", "bachelors", "b.tech", "b.s.", "b.e."], type: 'Education' },
+  { term: "Master's Degree (CS/STEM)", aliases: ["ms in computer science", "ms in cs", "m.s. in computer science", "master's degree in computer science", "master's degree", "masters degree", "graduate degree", "master of science", "master's", "masters", "m.tech", "m.s."], type: 'Education' },
+  { term: "Ph.D. / Doctorate", aliases: ["ph.d. in computer science", "phd in computer science", "ph.d.", "phd", "doctorate", "doctoral degree", "doctor of philosophy"], type: 'Education' },
+  { term: "Computer Science (CS)", aliases: ["computer science", "degree in computer science", "major in computer science", "cs degree", "computer engineering", "cs/ce"], type: 'Education' },
+  { term: "STEM / Engineering Degree", aliases: ["stem field", "stem discipline", "stem major", "quantitative field", "degree in engineering", "software engineering degree", "electrical engineering", "mathematics degree", "statistics degree", "data science degree", "related technical field", "related stem field"], type: 'Education' },
+  { term: "Associate's Degree", aliases: ["associate degree", "associates degree", "associate's degree", "a.s. degree", "a.a. degree"], type: 'Education' },
+  { term: "Coding Bootcamp / Equivalent", aliases: ["coding bootcamp", "technical bootcamp", "equivalent practical experience", "equivalent work experience", "equivalent experience"], type: 'Education' }
 ];
 
 if (typeof window !== 'undefined') {

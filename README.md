@@ -87,7 +87,7 @@ Job descriptions often describe high-level problems without explicitly spelling 
 1. **Open any job posting** on LinkedIn, Indeed, Greenhouse, or any company career page.
 2. **Click the extension icon** in your toolbar to scan the posting.
 3. **Explore Extracted Skills**:
-   * Switch between **All**, **Required**, **Preferred**, and **Other** tabs.
+   * Switch between **All**, **Required**, **Education**, and **Other** tabs.
    * View the occurrence frequency (`4x`, `2x`) beside each skill.
    * Look for **`✨ AI Implied`** badges for skills deduced from technical problem contexts.
    * Click any skill row to scroll and pulse-highlight that keyword directly on the live webpage.
@@ -107,7 +107,7 @@ Job descriptions often describe high-level problems without explicitly spelling 
 | **🎯 Exact Verbatim Text Preservation** | Retains the exact grammatical spelling, case, and capitalization found in the posting (e.g., `Python 3`, `PostgreSQL`, `Distributed Systems`). |
 | **🛡️ 100% Technical-Only Ontology** | Zero behavioral fluff. Curated strictly across 450+ technical pillars (Languages, AI/ML, Cloud & DevOps, Databases, Systems, Web Frameworks, Testing, Agile). |
 | **🔤 Contextual Homograph Disambiguation** | Prevents false positives on English verbs (e.g., skips *"we go above and beyond"*, accurately extracts *"Python, Go, and AWS"*). |
-| **📊 Scope Categorization** | Automatically segments keywords into 🔴 **Required** *(must-haves)*, 🟡 **Preferred** *(nice-to-haves)*, and ⚪ **Other** *(general duties)*. |
+| **📊 Scope Categorization** | Automatically segments keywords into 🔴 **Required** *(must-haves)*, 🎓 **Education** *(degrees, STEM qualifications, bootcamps)*, and ⚪ **Other** *(general duties)*. |
 | **🔍 Active Container Isolation** | Strictly bounds DOM traversal to the active job description pane (`#job-details`), eliminating noise from sidebars, search lists, and applicant stats. |
 | **⚡ 10x–15x Regex Fast-Path Acceleration** | Uses boolean test pre-checks to skip non-matching dictionary rules, parsing long descriptions in under **5ms**. |
 | **🎨 Glassmorphism Interface** | Frosted glass aesthetic (`backdrop-filter: blur(16px)`), circular checkmarks, instant dismissals, and single-click copy actions. |
@@ -129,7 +129,7 @@ graph TD
     B -->|YC / Glassdoor / iCIMS| G["Platform-Specific Containers"]
     B -->|Any Other Career Site| H["Universal Fallback Heuristics Engine"]
     C & D & E & F & G & H --> I["Client-Side NLP & Section Classifier"]
-    I --> J["Scope Classification: Required, Preferred, Other"]
+    I --> J["Scope Classification: Required, Education, Other"]
     J --> K["Glassmorphism UI & In-Page Highlighter"]
 ```
 

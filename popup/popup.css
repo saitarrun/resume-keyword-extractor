@@ -291,6 +291,11 @@ body::after {
   color: #991b1b;
 }
 
+.scope-btn.active .pill-edu {
+  background: rgba(254, 243, 199, 0.95);
+  color: #92400e;
+}
+
 .scope-btn.active .pill-pref {
   background: rgba(254, 243, 199, 0.95);
   color: #92400e;
@@ -495,6 +500,12 @@ body::after {
   background: rgba(254, 242, 242, 0.9);
   color: #b91c1c;
   border: 1px solid rgba(254, 202, 202, 0.8);
+}
+
+.tag-edu {
+  background: rgba(255, 251, 235, 0.95);
+  color: #b45309;
+  border: 1px solid rgba(253, 230, 138, 0.85);
 }
 
 .tag-pref {

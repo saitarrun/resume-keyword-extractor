@@ -5,14 +5,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   let extractionResult = {
     allKeywords: [],
     requiredKeywords: [],
-    preferredKeywords: [],
+    educationKeywords: [],
     otherKeywords: [],
     totalCount: 0,
     requiredCount: 0,
-    preferredCount: 0,
+    educationCount: 0,
     otherCount: 0
   };
-  let currentScope = 'all'; // 'all' | 'required' | 'preferred' | 'other'
+  let currentScope = 'all'; // 'all' | 'required' | 'education' | 'other'
   let isExpanded = false;
   let highlightsActive = true;
   const INITIAL_VISIBLE_COUNT = 6;
@@ -495,13 +495,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             term: skill.trim(),
             canonicalTerm: skill.trim(),
             type: 'Technical',
-            section: 'preferred',
-            inPreferred: true,
+            section: 'other',
+            inGeneral: true,
             isAISemantic: true,
             frequency: 1
           };
           extractionResult.allKeywords.push(item);
-          extractionResult.preferredKeywords.push(item);
+          extractionResult.otherKeywords.push(item);
           newItemsAdded = true;
         }
       });
@@ -519,13 +519,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   function updateBadgeCounts() {
     document.getElementById('tab-count-all').textContent = extractionResult.allKeywords?.length || 0;
     document.getElementById('tab-count-required').textContent = extractionResult.requiredKeywords?.length || 0;
-    document.getElementById('tab-count-preferred').textContent = extractionResult.preferredKeywords?.length || 0;
+    document.getElementById('tab-count-education').textContent = extractionResult.educationKeywords?.length || 0;
     document.getElementById('tab-count-other').textContent = extractionResult.otherKeywords?.length || 0;
   }
 
   function getVisibleKeywords() {
     if (currentScope === 'required') return extractionResult.requiredKeywords || [];
-    if (currentScope === 'preferred') return extractionResult.preferredKeywords || [];
+    if (currentScope === 'education') return extractionResult.educationKeywords || [];
     if (currentScope === 'other') return extractionResult.otherKeywords || [];
     return extractionResult.allKeywords || [];
   }
@@ -565,10 +565,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         scopeBadgeHtml = '<span class="tag-scope tag-ai">✨ AI Implied</span>';
       } else if (k.isLearned) {
         scopeBadgeHtml = '<span class="tag-scope tag-learned">✨ Learned</span>';
+      } else if (k.type === 'Education' || k.section === 'education' || k.inEducation) {
+        scopeBadgeHtml = '<span class="tag-scope tag-edu">Education</span>';
       } else if (k.section === 'required' || k.inRequired) {
         scopeBadgeHtml = '<span class="tag-scope tag-req">Required</span>';
-      } else if (k.section === 'preferred' || k.inPreferred) {
-        scopeBadgeHtml = '<span class="tag-scope tag-pref">Preferred</span>';
       } else {
         scopeBadgeHtml = '<span class="tag-scope tag-oth">Other</span>';
       }
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         extractionResult.allKeywords = extractionResult.allKeywords.filter(k => k.term !== term);
         extractionResult.requiredKeywords = extractionResult.requiredKeywords.filter(k => k.term !== term);
-        extractionResult.preferredKeywords = extractionResult.preferredKeywords.filter(k => k.term !== term);
+        extractionResult.educationKeywords = extractionResult.educationKeywords.filter(k => k.term !== term);
         extractionResult.otherKeywords = extractionResult.otherKeywords.filter(k => k.term !== term);
         updateBadgeCounts();
         renderCurrentScopeList();
@@ -664,7 +664,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('job-company').textContent = 'Ready to scan';
     document.getElementById('tab-count-all').textContent = '0';
     document.getElementById('tab-count-required').textContent = '0';
-    document.getElementById('tab-count-preferred').textContent = '0';
+    document.getElementById('tab-count-education').textContent = '0';
     document.getElementById('tab-count-other').textContent = '0';
     document.getElementById('skills-list').innerHTML = `
       <div class="empty-state">
