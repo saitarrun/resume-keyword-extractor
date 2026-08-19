@@ -21,8 +21,10 @@ const PORTAL_SELECTORS = {
       '.jobs-details-top-card__company-url'
     ],
     descriptionSelectors: [
-      '#job-details',
+      '.jobs-search__job-details #job-details',
+      '.scaffold-layout__detail #job-details',
       '.jobs-description-content__text',
+      '#job-details',
       '.jobs-box__html-content',
       '.jobs-description__container',
       '.show-more-less-html__markup',
@@ -381,9 +383,10 @@ class PortalRegistry {
       '.global-nav', '#global-nav',
       '.jobs-search-results-list', '.scaffold-layout__list', '.jobs-search-two-pane__job-section',
       '.jobs-search-results-list__list', '[data-view-name="job-card"]', '.job-card-container',
+      '.jobs-search-box', '.jobs-search-results-list__header',
       '.jobs-premium-applicant-insights', '.jobs-premium-applicant-insights__education',
       '.jobs-unified-top-card__applicant-count', '.jobs-applicant-insights',
-      '#msg-overlay', '.msg-overlay-list-bubble',
+      '#msg-overlay', '.msg-overlay', '.msg-overlay-list-bubble',
       '.cookie-banner', '.advertisement', '.ad-container',
       'button', 'svg', 'form', 'input', 'script', 'style', 'noscript',
       '.jke-sidebar-container', '#jke-picker-banner'

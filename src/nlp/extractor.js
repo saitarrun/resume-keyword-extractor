@@ -207,25 +207,6 @@ class KeywordExtractor {
       }
     }
 
-    // 2. Real-Time Autonomous Skill Discovery (Unsupervised in-page pattern mining)
-    if (this.learner && typeof this.learner.discoverNewSkills === 'function') {
-      const discovered = this.learner.discoverNewSkills(cleanText, this.knownTermsSet);
-      for (const disc of discovered) {
-        const dedupeKey = disc.term.toLowerCase();
-        if (!seenTermMap.has(dedupeKey) && !this.learner.isBlocked(disc.term)) {
-          // Check section placement for discovered term
-          const termRegex = new RegExp(`(?<![a-zA-Z0-9])(${disc.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(?![a-zA-Z0-9])`, 'i');
-          const inReq = !!(sections.requiredText && termRegex.test(sections.requiredText)) || !!(sections.requirementLinesText && termRegex.test(sections.requirementLinesText));
-          const inPref = !!(sections.preferredText && termRegex.test(sections.preferredText));
-          
-          disc.section = inReq ? 'required' : (inPref ? 'preferred' : 'other');
-          disc.inRequired = inReq;
-          disc.inPreferred = inPref;
-          seenTermMap.set(dedupeKey, disc);
-        }
-      }
-    }
-
     const allKeywords = Array.from(seenTermMap.values());
     const requiredKeywords = allKeywords.filter(k => k.inRequired || k.section === 'required');
     const preferredKeywords = allKeywords.filter(k => k.inPreferred || k.section === 'preferred');

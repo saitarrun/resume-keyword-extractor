@@ -146,6 +146,8 @@ document.addEventListener('DOMContentLoaded', async () => {
               '.job-card-container',
               '.jobs-search-results',
               '.jobs-search-results-list__list-item',
+              '.jobs-search-box',
+              '.jobs-search-results-list__header',
               // Applicant statistics & candidate insights
               '.jobs-premium-applicant-insights',
               '.jobs-premium-applicant-insights__education',
@@ -153,21 +155,18 @@ document.addEventListener('DOMContentLoaded', async () => {
               '.jobs-applicant-insights',
               // Messaging, headers, sidebars & navigation
               '.global-nav', '#global-nav', 'header', 'nav', 'footer', 'aside',
-              '#msg-overlay', '.msg-overlay-list-bubble', '.feed-shared-update-v2',
+              '#msg-overlay', '.msg-overlay', '.msg-overlay-list-bubble', '.feed-shared-update-v2',
               '.jke-sidebar-container', '#jke-picker-banner'
             ];
 
             function isExcluded(node) {
               if (!node) return false;
-              if (node.nodeType === Node.ELEMENT_NODE) {
-                for (const sel of EXCLUDED_SELECTORS) {
-                  if (node.matches && node.matches(sel)) return true;
-                  if (node.closest && node.closest(sel)) return true;
-                }
-              } else if (node.parentElement) {
-                for (const sel of EXCLUDED_SELECTORS) {
-                  if (node.parentElement.closest && node.parentElement.closest(sel)) return true;
-                }
+              const el = (node.nodeType === Node.ELEMENT_NODE) ? node : node.parentElement;
+              if (!el) return false;
+
+              for (const sel of EXCLUDED_SELECTORS) {
+                if (el.matches && el.matches(sel)) return true;
+                if (el.closest && el.closest(sel)) return true;
               }
               return false;
             }
@@ -206,8 +205,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           // Dedicated active job description selectors (Ordered strictly by specificity)
           const platformSelectors = [
             // LinkedIn exact active description pane
-            '#job-details',
+            '.jobs-search__job-details #job-details',
+            '.scaffold-layout__detail #job-details',
             '.jobs-description-content__text',
+            '#job-details',
             '.jobs-box__html-content',
             '.jobs-description__container',
             '.show-more-less-html__markup',
@@ -582,10 +583,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           const escaped = uniquePhrases.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
           const regex = new RegExp(`(?<![a-zA-Z0-9])(${escaped})(?![a-zA-Z0-9])`, 'gi');
 
-          // Locate active job description container to prevent polluting sidebars/search lists
+          // Locate active job description container strictly to prevent polluting sidebars/search lists
           const targetContainer = document.querySelector(
-            '#job-details, .jobs-description-content__text, .jobs-box__html-content, .jobs-description__container, .show-more-less-html__markup, #jobDescriptionText, .jobsearch-jobDescriptionText, .jobsearch-JobComponent-description, #jobDescriptionSection, .iCIMS_JobContent, ._description_10l3e_43, .posting-sections, #content, #job-body, .job-sections, .JobDetails_jobDescription__uW_fK, #JobDescriptionContainer, #jobDescription, .job_description, .jss-job-description, .pos-description, .job-posting-body'
-          ) || document.body;
+            '.jobs-search__job-details #job-details, .scaffold-layout__detail #job-details, .scaffold-layout__detail, .jobs-search__job-details, #job-details, .jobs-description-content__text, .jobs-box__html-content, .jobs-description__container, .show-more-less-html__markup, #jobDescriptionText, .jobsearch-jobDescriptionText, .jobsearch-JobComponent-description, #jobDescriptionSection, .iCIMS_JobContent, ._description_10l3e_43, .posting-sections, #content, #job-body, .job-sections, .JobDetails_jobDescription__uW_fK, #JobDescriptionContainer, #jobDescription, .job_description, .jss-job-description, .pos-description, .job-posting-body'
+          ) || document.querySelector('main, article') || document.body;
 
           const EXCLUDED_SELECTORS = [
             // Left-hand job recommendation/search list cards (Other applications)
@@ -597,6 +598,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             '.job-card-container',
             '.jobs-search-results',
             '.jobs-search-results-list__list-item',
+            '.jobs-search-box',
+            '.jobs-search-results-list__header',
             // Applicant statistics & candidate insights
             '.jobs-premium-applicant-insights',
             '.jobs-premium-applicant-insights__education',
@@ -604,21 +607,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             '.jobs-applicant-insights',
             // Messaging, headers, sidebars & navigation
             '.global-nav', '#global-nav', 'header', 'nav', 'footer', 'aside',
-            '#msg-overlay', '.msg-overlay-list-bubble', '.feed-shared-update-v2',
+            '#msg-overlay', '.msg-overlay', '.msg-overlay-list-bubble', '.feed-shared-update-v2',
             '.jke-sidebar-container', '#jke-picker-banner'
           ];
 
           function isExcluded(node) {
             if (!node) return false;
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              for (const sel of EXCLUDED_SELECTORS) {
-                if (node.matches && node.matches(sel)) return true;
-                if (node.closest && node.closest(sel)) return true;
-              }
-            } else if (node.parentElement) {
-              for (const sel of EXCLUDED_SELECTORS) {
-                if (node.parentElement.closest && node.parentElement.closest(sel)) return true;
-              }
+            const el = (node.nodeType === Node.ELEMENT_NODE) ? node : node.parentElement;
+            if (!el) return false;
+
+            for (const sel of EXCLUDED_SELECTORS) {
+              if (el.matches && el.matches(sel)) return true;
+              if (el.closest && el.closest(sel)) return true;
             }
             return false;
           }
